@@ -1,4 +1,4 @@
-package uk.gov.ons.ctp.integration.fakecaseservice.endpoint;
+package uk.gov.ons.ctp.integration.mockcaseapiservice.endpoint;
 
 import com.godaddy.logging.Logger;
 import com.godaddy.logging.LoggerFactory;
@@ -19,15 +19,15 @@ import uk.gov.ons.ctp.common.error.CTPException;
 import uk.gov.ons.ctp.common.time.DateTimeUtil;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.CaseRequestDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.model.UniquePropertyReferenceNumber;
-import uk.gov.ons.ctp.integration.fakecaseservice.client.model.CaseContainerDTO;
-import uk.gov.ons.ctp.integration.fakecaseservice.client.model.EventDTO;
 import uk.gov.ons.ctp.integration.fakecaseservice.utility.FailureSimulator;
+import uk.gov.ons.ctp.integration.mockcaseapiservice.client.model.CaseContainerDTO;
+import uk.gov.ons.ctp.integration.mockcaseapiservice.client.model.EventDTO;
 
 /** Provides fake endpoints for the case service. */
 @RestController
 @RequestMapping(value = "/cases", produces = "application/json")
-public final class CaseServiceFakeStub implements CTPEndpoint {
-  private static final Logger log = LoggerFactory.getLogger(CaseServiceFakeStub.class);
+public final class CaseServiceMockStub implements CTPEndpoint {
+  private static final Logger log = LoggerFactory.getLogger(CaseServiceMockStub.class);
 
   @RequestMapping(value = "/info", method = RequestMethod.GET)
   public ResponseEntity<String> info() throws CTPException {

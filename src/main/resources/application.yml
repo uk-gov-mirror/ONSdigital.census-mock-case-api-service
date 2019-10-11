@@ -51,7 +51,7 @@ spring:
     ansi:
       enabled: never
   application:
-    name: ONS FakeCaseService
+    name: ONS CensusMockCaseApiService
 
 
 address-index-settings:

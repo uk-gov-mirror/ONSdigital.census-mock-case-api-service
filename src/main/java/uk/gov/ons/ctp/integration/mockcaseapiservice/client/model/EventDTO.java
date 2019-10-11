@@ -1,4 +1,4 @@
-package uk.gov.ons.ctp.integration.fakecaseservice.client.model;
+package uk.gov.ons.ctp.integration.mockcaseapiservice.client.model;
 
 import java.util.Date;
 import lombok.Data;

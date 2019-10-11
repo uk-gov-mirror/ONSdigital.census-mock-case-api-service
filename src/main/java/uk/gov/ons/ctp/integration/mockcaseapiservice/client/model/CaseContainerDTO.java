@@ -1,4 +1,4 @@
-package uk.gov.ons.ctp.integration.fakecaseservice.client.model;
+package uk.gov.ons.ctp.integration.mockcaseapiservice.client.model;
 
 import java.util.Date;
 import java.util.List;
@@ -54,5 +54,5 @@ public class CaseContainerDTO {
 
   private String lad;
 
-  private List<EventDTO> caseEvents;
+  private List<uk.gov.ons.ctp.integration.mockcaseapiservice.client.model.EventDTO> caseEvents;
 }
