@@ -19,10 +19,10 @@ import uk.gov.ons.ctp.common.error.CTPException;
 import uk.gov.ons.ctp.common.time.DateTimeUtil;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.CaseRequestDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.model.UniquePropertyReferenceNumber;
-import uk.gov.ons.ctp.integration.fakecaseservice.client.model.CaseContainerDTO;
-import uk.gov.ons.ctp.integration.fakecaseservice.client.model.EventDTO;
-import uk.gov.ons.ctp.integration.fakecaseservice.client.model.QuestionnaireIdDTO;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 import uk.gov.ons.ctp.integration.fakecaseservice.utility.FailureSimulator;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
 
 /** Provides fake endpoints for the case service. */
 @RestController
@@ -117,6 +117,7 @@ public final class CaseServiceFakeStub implements CTPEndpoint {
     QuestionnaireIdDTO questionnaireId = new QuestionnaireIdDTO();
 
     questionnaireId.setQuestionnaireId("1110000010");
+    questionnaireId.setActive(true);
 
     return questionnaireId;
   }
@@ -132,13 +133,13 @@ public final class CaseServiceFakeStub implements CTPEndpoint {
       EventDTO e1 = new EventDTO();
       e1.setId("101");
       e1.setDescription("Initial creation of case");
-      e1.setCategory("CASE_CREATED");
+      e1.setEventType("CASE_CREATED");
       e1.setCreatedDateTime(dateParser.parse("2019-04-01T07:12:26.626Z"));
 
       EventDTO e2 = new EventDTO();
       e2.setId("102");
       e2.setDescription("Create Household Visit");
-      e2.setCategory("CASE_UPDATED");
+      e1.setEventType("CASE_UPDATED");
       e2.setCreatedDateTime(dateParser.parse("2019-12-14T12:45:26.751Z"));
 
       caseEvents.add(e1);
