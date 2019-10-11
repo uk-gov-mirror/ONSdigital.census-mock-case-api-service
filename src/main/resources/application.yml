@@ -1,0 +1,83 @@
+info:
+  name: ${project.artifactId}
+  version: ${project.version}
+  origin: ${scm.url}
+  commit: ${buildNumber}
+  branch: ${scmBranch}
+  built: ${timestamp}
+
+# logging config here as a reminder as to how to override logback from cmd line
+# ie -Dlogging.level.org.springframework=DEBUG
+logging:
+  level:
+    uk.gov.ons.ctp: DEBUG
+    org.springframework: ERROR
+  profile: DEV
+  useJson: false
+
+
+management:
+  health:
+    rabbit:
+      enabled: false
+  endpoints:
+    enabled-by-default: true
+    web:
+      base-path: /
+  info:
+    env:
+      enabled: true 
+    build:
+      enabled: true 
+    git:
+      mode: SIMPLE 
+      enabled: true 
+    defaults:
+      enabled: true 
+
+server:
+  port: 8161
+
+spring:
+  mvc:
+    servlet:
+      path: /
+  
+#  security:
+#    user:
+#      name: serco_cks
+#      password: temporary
+  output:
+    ansi:
+      enabled: never
+  application:
+    name: ONS FakeCaseService
+
+
+address-index-settings:
+  address-query-path: /addresses
+  postcode-lookup-path: /addresses/postcode/{postcode}
+  rest-client-config:
+    scheme: http
+    host: addressindex-api-beta.apps.devtest.onsclofo.uk
+    port: 80
+    
+case-service-settings:
+  case-by-id-query-path: /cases/{case-id}
+  case-by-uprn-query-path: /cases/uprn/{uprn}
+  case-by-case-reference-query-path: /cases/ref/{reference}
+  rest-client-config:
+    username: serco_cks
+    password: temporary
+    scheme: http
+    host: localhost
+    port: 8171
+
+rabbitmq:
+  username: guest
+  password: guest
+  host: localhost
+  port: 35672
+  virtual-host: /
+report-settings:
+  cron-expression: "0 * * * * *"
