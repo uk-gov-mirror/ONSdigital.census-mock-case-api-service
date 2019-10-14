@@ -23,8 +23,6 @@ import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireI
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.CaseRequestDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.model.UniquePropertyReferenceNumber;
 import uk.gov.ons.ctp.integration.fakecaseservice.utility.FailureSimulator;
-import uk.gov.ons.ctp.integration.mockcaseapiservice.client.model.CaseContainerDTO;
-import uk.gov.ons.ctp.integration.mockcaseapiservice.client.model.EventDTO;
 
 /** Provides fake endpoints for the case service. */
 @RestController
@@ -33,7 +31,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   private static final Logger log = LoggerFactory.getLogger(CaseServiceMockStub.class);
 
   @RequestMapping(value = "/info", method = RequestMethod.GET)
-  public ResponseEntity<String> info() throws CTPException {
+  public ResponseEntity<String> info()  {
 
     return ResponseEntity.ok("FAKE CASE SERVICE");
   }
@@ -44,7 +42,6 @@ public final class CaseServiceMockStub implements CTPEndpoint {
    * @param caseId to find by
    * @param caseevents flag used to return or not CaseEvents
    * @return the case found
-   * @throws CTPException something went wrong
    * @throws ParseException x
    */
   @RequestMapping(value = "/{caseId}", method = RequestMethod.GET)
