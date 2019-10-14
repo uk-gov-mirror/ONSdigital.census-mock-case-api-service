@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.ons.ctp.common.endpoint.CTPEndpoint;
 import uk.gov.ons.ctp.common.error.CTPException;
 import uk.gov.ons.ctp.common.time.DateTimeUtil;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.CaseRequestDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.model.UniquePropertyReferenceNumber;
 import uk.gov.ons.ctp.integration.fakecaseservice.utility.FailureSimulator;
@@ -58,6 +61,25 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     return ResponseEntity.ok(caseDetails);
   }
 
+  /**
+   * the GET endpoint to find a Questionnaire Id by Case ID
+   *
+   * @param caseId to find by
+   * @return the questionnaire id found
+   * @throws CTPException something went wrong
+   */
+  @RequestMapping(value = "/ccs/{caseId}/qid", method = RequestMethod.GET)
+  public ResponseEntity<QuestionnaireIdDTO> findQuestionnaireIdByCaseId(
+      @PathVariable("caseId") final UUID caseId) throws CTPException {
+    log.with("case_id", caseId).debug("Entering findQuestionnaireIdByCaseId");
+
+    FailureSimulator.optionallyTriggerFailure(caseId.toString(), 400, 401, 404, 500);
+
+    QuestionnaireIdDTO questionnaireId = createFakeQID();
+
+    return ResponseEntity.ok(questionnaireId);
+  }
+
   @RequestMapping(value = "/uprn/{uprn}", method = RequestMethod.GET)
   public ResponseEntity<List<CaseContainerDTO>> findCaseByUPRN(
       @PathVariable(value = "uprn") final UniquePropertyReferenceNumber uprn)
@@ -92,6 +114,16 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     return ResponseEntity.ok(caseData);
   }
 
+  private QuestionnaireIdDTO createFakeQID() {
+
+    QuestionnaireIdDTO questionnaireId = new QuestionnaireIdDTO();
+
+    questionnaireId.setQuestionnaireId("1110000010");
+    questionnaireId.setActive(true);
+
+    return questionnaireId;
+  }
+
   private CaseContainerDTO createFakeCase(
       UUID caseId, String address, String caseRef, boolean includeCaseEvents)
       throws ParseException {
@@ -103,13 +135,13 @@ public final class CaseServiceMockStub implements CTPEndpoint {
       EventDTO e1 = new EventDTO();
       e1.setId("101");
       e1.setDescription("Initial creation of case");
-      e1.setCategory("CASE_CREATED");
+      e1.setEventType("CASE_CREATED");
       e1.setCreatedDateTime(dateParser.parse("2019-04-01T07:12:26.626Z"));
 
       EventDTO e2 = new EventDTO();
       e2.setId("102");
       e2.setDescription("Create Household Visit");
-      e2.setCategory("CASE_UPDATED");
+      e1.setEventType("CASE_UPDATED");
       e2.setCreatedDateTime(dateParser.parse("2019-12-14T12:45:26.751Z"));
 
       caseEvents.add(e1);
@@ -144,49 +176,4 @@ public final class CaseServiceMockStub implements CTPEndpoint {
 
     return caseDetails;
   }
-
-  //  private String createCaseString() {
-  //    String caseDetails =
-  //        "{\n"
-  //            + "  \"id\": \"b7565b5e-1396-4965-91a2-918c0d3642ed\",\n"
-  //            + "  \"arid\": \"2344266233\",\n"
-  //            + "  \"estabArid\": \"AABBCC\",\n"
-  //            + "  \"estabType\": \"ET\",\n"
-  //            + "  \"uprn\": \"1235532324343434\",\n"
-  //            + "  \"caseRef\": \"1000000000000001\",\n"
-  //            + "  \"caseType\": \"HH\",\n"
-  //            + "  \"createdDateTime\": \"2019-05-14T16:11:41.343+01:00\",\n"
-  //            + "  \"addressLine1\": \"Napier House\",\n"
-  //            + "  \"addressLine2\": \"11 Park Street\",\n"
-  //            + "  \"addressLine3\": \"Parkhead\",\n"
-  //            + "  \"townName\": \"Glasgow\",\n"
-  //            + "  \"postcode\": \"G1 2AA\",\n"
-  //            + "  \"organisationName\": \"ON\",\n"
-  //            + "  \"addressLevel\": \"E\",\n"
-  //            + "  \"abpCode\": \"AACC\",\n"
-  //            + "  \"region\": \"E\",\n"
-  //            + "  \"latitude\": \"41.40338\",\n"
-  //            + "  \"longitude\": \"2.17403\",\n"
-  //            + "  \"oa\": \"EE22\",\n"
-  //            + "  \"lsoa\": \"x1\",\n"
-  //            + "  \"msoa\": \"x2\",\n"
-  //            + "  \"lad\": \"H1\",\n"
-  //            + "  \"caseEvents\": [\n"
-  //            + "    {\n"
-  //            + "      \"id\": \"101\",\n"
-  //            + "      \"category\": \"CASE_CREATED\",\n"
-  //            + "      \"description\": \"Initial creation of case\",\n"
-  //            + "      \"createdDateTime\": \"2019-05-14T16:11:41\"\n"
-  //            + "    },\n"
-  //            + "    {\n"
-  //            + "      \"id\": \"102\",\n"
-  //            + "      \"category\": \"CASE_UPDATED\",\n"
-  //            + "      \"description\": \"Create Household Visit\",\n"
-  //            + "      \"createdDateTime\": \"2019-05-16T12:12:12.343Z\"\n"
-  //            + "    }\n"
-  //            + "  ]\n"
-  //            + "}";
-  //
-  //    return caseDetails;
-  //  }
 }
