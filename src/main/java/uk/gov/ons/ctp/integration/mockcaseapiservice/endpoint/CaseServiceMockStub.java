@@ -22,9 +22,9 @@ import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.CaseRequestDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.model.UniquePropertyReferenceNumber;
-import uk.gov.ons.ctp.integration.fakecaseservice.utility.FailureSimulator;
+import uk.gov.ons.ctp.integration.mockcaseapiservice.utility.FailureSimulator;
 
-/** Provides fake endpoints for the case service. */
+/** Provides mock endpoints for the case service. */
 @RestController
 @RequestMapping(value = "/cases", produces = "application/json")
 public final class CaseServiceMockStub implements CTPEndpoint {
@@ -33,7 +33,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   @RequestMapping(value = "/info", method = RequestMethod.GET)
   public ResponseEntity<String> info()  {
 
-    return ResponseEntity.ok("FAKE CASE SERVICE");
+    return ResponseEntity.ok("CEBNSUS MOCK CASE SERVICE");
   }
 
   /**
