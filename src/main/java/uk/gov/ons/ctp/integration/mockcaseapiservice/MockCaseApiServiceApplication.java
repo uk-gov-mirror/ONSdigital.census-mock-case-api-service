@@ -1,4 +1,4 @@
-package uk.gov.ons.ctp.integration.fakecaseservice;
+package uk.gov.ons.ctp.integration.mockcaseapiservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +17,7 @@ import uk.gov.ons.ctp.common.jackson.CustomObjectMapper;
 @ComponentScan(basePackages = {"uk.gov.ons.ctp.integration"})
 @ImportResource("springintegration/main.xml")
 @EnableCaching
-public class FakeCaseServiceApplication {
+public class MockCaseApiServiceApplication {
 
   /**
    * The main entry point for this application.
@@ -26,7 +26,7 @@ public class FakeCaseServiceApplication {
    */
   public static void main(final String[] args) {
 
-    SpringApplication.run(FakeCaseServiceApplication.class, args);
+    SpringApplication.run(MockCaseApiServiceApplication.class, args);
   }
 
   /**

@@ -1,4 +1,4 @@
-package uk.gov.ons.ctp.integration.fakecaseservice.utility;
+package uk.gov.ons.ctp.integration.mockcaseapiservice.utility;
 
 import java.util.HashMap;
 import java.util.Map;

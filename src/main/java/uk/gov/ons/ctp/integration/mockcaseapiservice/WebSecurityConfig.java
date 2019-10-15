@@ -1,4 +1,4 @@
-package uk.gov.ons.ctp.integration.fakecaseservice;
+package uk.gov.ons.ctp.integration.mockcaseapiservice;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
