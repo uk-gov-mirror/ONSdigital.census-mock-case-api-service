@@ -33,7 +33,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   @RequestMapping(value = "/info", method = RequestMethod.GET)
   public ResponseEntity<String> info()  {
 
-    return ResponseEntity.ok("CEBNSUS MOCK CASE SERVICE");
+    return ResponseEntity.ok("CENSUS MOCK CASE SERVICE");
   }
 
   /**
