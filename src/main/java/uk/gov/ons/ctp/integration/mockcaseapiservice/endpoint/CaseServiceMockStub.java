@@ -31,7 +31,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   private static final Logger log = LoggerFactory.getLogger(CaseServiceMockStub.class);
 
   @RequestMapping(value = "/info", method = RequestMethod.GET)
-  public ResponseEntity<String> info()  {
+  public ResponseEntity<String> info() {
 
     return ResponseEntity.ok("CENSUS MOCK CASE SERVICE");
   }
