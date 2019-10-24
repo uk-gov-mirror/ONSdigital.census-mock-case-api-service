@@ -5,8 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
-import uk.gov.ons.ctp.integration.mockcaseapiservice.client.model.CaseContainerDTO;
+
 
 import java.io.IOException;
 import java.util.*;
@@ -49,9 +50,9 @@ public class CasesConfig {
         this.questionnaires = questionnaires;
         final ObjectMapper objectMapper = new ObjectMapper();
         final List<QuestionnaireIdDTO> questionnaireIdDTOList  = objectMapper.readValue(questionnaires, new TypeReference<List<QuestionnaireIdDTO>>(){});
-        questionnaireIdDTOList.forEach( q-> {
-            questionnaireMap.put(q.getQuestionnaireId(), q);
-        });
+        questionnaireIdDTOList.forEach( q->
+            questionnaireMap.put(q.getQuestionnaireId(), q)
+        );
     }
 
     public CaseContainerDTO getCaseByUUID(final String key) {

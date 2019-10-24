@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.ons.ctp.common.endpoint.CTPEndpoint;
 import uk.gov.ons.ctp.common.error.CTPException;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.CaseRequestDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.model.UniquePropertyReferenceNumber;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.CasesConfig;
-import uk.gov.ons.ctp.integration.mockcaseapiservice.client.model.CaseContainerDTO;
-import uk.gov.ons.ctp.integration.mockcaseapiservice.client.model.EventDTO;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.utility.FailureSimulator;
 
 /** Provides mock endpoints for the case service. */

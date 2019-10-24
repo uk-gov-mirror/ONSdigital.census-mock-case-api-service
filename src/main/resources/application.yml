@@ -108,7 +108,10 @@ examples:
        "caseEvents": [],
        "id": "3305e937-6fb1-4ce1-9d4c-077f147789ac",
        "caseType": "HH",
-       "region": "E"
+       "region": "E",
+       "state": "",
+       "collectionExerciseId": "",
+       "surveyType": ""
      },
      {
        "caseRef": "124124",
@@ -134,7 +137,10 @@ examples:
        "caseEvents": [],
        "id": "3305e937-6fb1-4ce1-9d4c-077f147789ab",
        "caseType": "HH",
-       "region": "E"
+       "region": "E",
+       "state": "",
+       "collectionExerciseId": "",
+       "surveyType": ""
      }
      ]'
   questionnaires: '[
@@ -147,3 +153,4 @@ examples:
       "active": "true"
     }
   ]'
+
