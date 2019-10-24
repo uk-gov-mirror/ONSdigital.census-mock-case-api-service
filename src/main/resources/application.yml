@@ -81,3 +81,69 @@ rabbitmq:
   virtual-host: /
 report-settings:
   cron-expression: "0 * * * * *"
+
+examples:
+  cases: '[
+      {
+       "caseRef": "123123",
+       "arid": "2344266233",
+       "estabArid": "AABBCC",
+       "estabType": "ET",
+       "uprn": "1347459999",
+       "createdDateTime": "2019-04-14T13:45:26.564+01:00",
+       "addressLine1": "Napier House",
+       "addressLine2": "88 Harbour Street",
+       "addressLine3": "Parkhead",
+       "townName": "Glasgow",
+       "postcode": "G1 2AA",
+       "organisationName": "ON",
+       "addressLevel": "E",
+       "abpCode": "AACC",
+       "latitude": "41.40338",
+       "longitude": "2.17403",
+       "oa": "EE22",
+       "lsoa": "x1",
+       "msoa": "x2",
+       "lad": "H1",
+       "caseEvents": [],
+       "id": "3305e937-6fb1-4ce1-9d4c-077f147789ac",
+       "caseType": "HH",
+       "region": "E"
+     },
+     {
+       "caseRef": "124124",
+       "arid": "2344266233",
+       "estabArid": "AABBCC",
+       "estabType": "ET",
+       "uprn": "1347459999",
+       "createdDateTime": "2019-04-14T13:45:26.564+01:00",
+       "addressLine1": "Napier House",
+       "addressLine2": "88 Harbour Street",
+       "addressLine3": "Parkhead",
+       "townName": "Glasgow",
+       "postcode": "G1 2AA",
+       "organisationName": "ON",
+       "addressLevel": "E",
+       "abpCode": "AACC",
+       "latitude": "41.40338",
+       "longitude": "2.17403",
+       "oa": "EE22",
+       "lsoa": "x1",
+       "msoa": "x2",
+       "lad": "H1",
+       "caseEvents": [],
+       "id": "3305e937-6fb1-4ce1-9d4c-077f147789ab",
+       "caseType": "HH",
+       "region": "E"
+     }
+     ]'
+  questionnaires: '[
+     {
+       "questionnaireId": "3305e937-6fb1-4ce1-9d4c-077f147789ab",
+       "active": "true"
+     },
+    {
+      "questionnaireId": "3305e937-6fb1-4ce1-9d4c-077f147789ac",
+      "active": "true"
+    }
+  ]'
