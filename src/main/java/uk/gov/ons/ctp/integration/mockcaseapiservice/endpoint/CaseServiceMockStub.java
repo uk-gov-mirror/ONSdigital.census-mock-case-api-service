@@ -32,7 +32,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   private static final Logger log = LoggerFactory.getLogger(CaseServiceMockStub.class);
 
   @Autowired private CasesConfig casesConfig; // can allow field injection here in a mock service.
-  @Autowired private QuestionnairesConfig qConfig;
+  @Autowired private QuestionnairesConfig questionnairesConfig;
 
   @RequestMapping(value = "/info", method = RequestMethod.GET)
   public ResponseEntity<String> info() {
@@ -40,8 +40,12 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   }
 
   @RequestMapping(value = "/examples", method = RequestMethod.GET)
-  public ResponseEntity<String> examples(){
-    return ResponseEntity.ok("CASES-- " + casesConfig.getCases() + " -- QUESTIONNAIRES-- " + qConfig.getQuestionnaires());
+  public ResponseEntity<String> examples() {
+    return ResponseEntity.ok(
+        "CASES-- "
+            + casesConfig.getCases()
+            + " -- QUESTIONNAIRES-- "
+            + questionnairesConfig.getQuestionnaires());
   }
 
   /**
@@ -78,15 +82,14 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     log.with("case_id", caseId).debug("Entering findQuestionnaireIdByCaseId");
 
     FailureSimulator.optionallyTriggerFailure(caseId.toString(), 400, 401, 404, 500);
-    QuestionnaireIdDTO questionnaireId = qConfig.getQuestionnaire(caseId.toString());
+    QuestionnaireIdDTO questionnaireId = questionnairesConfig.getQuestionnaire(caseId.toString());
     nullTestThrowsException(questionnaireId);
     return ResponseEntity.ok(questionnaireId);
   }
 
   @RequestMapping(value = "/uprn/{uprn}", method = RequestMethod.GET)
   public ResponseEntity<List<CaseContainerDTO>> findCaseByUPRN(
-      @PathVariable(value = "uprn") final UniquePropertyReferenceNumber uprn)
-      throws CTPException {
+      @PathVariable(value = "uprn") final UniquePropertyReferenceNumber uprn) throws CTPException {
     log.with("uprn", uprn).debug("Entering findCaseByUPRN");
 
     FailureSimulator.optionallyTriggerFailure(Long.toString(uprn.getValue()), 400, 401, 404, 500);
@@ -107,7 +110,8 @@ public final class CaseServiceMockStub implements CTPEndpoint {
 
     CaseContainerDTO caseDetails = casesConfig.getCaseByRef(Long.toString(ref));
     nullTestThrowsException(caseDetails);
-    caseDetails.setCaseEvents(getCaseEvents(requestParamsDTO.getCaseEvents(), caseDetails.getCreatedDateTime()));
+    caseDetails.setCaseEvents(
+        getCaseEvents(requestParamsDTO.getCaseEvents(), caseDetails.getCreatedDateTime()));
     return ResponseEntity.ok(caseDetails);
   }
 
