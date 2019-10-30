@@ -5,17 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Primary;
-import org.springframework.integration.annotation.IntegrationComponentScan;
 import uk.gov.ons.ctp.common.error.RestExceptionHandler;
 import uk.gov.ons.ctp.common.jackson.CustomObjectMapper;
 
 /** The 'main' entry point for the ContactCentre Svc SpringBoot Application. */
 @SpringBootApplication
-@IntegrationComponentScan("uk.gov.ons.ctp.integration")
-@ComponentScan(basePackages = {"uk.gov.ons.ctp.integration"})
-@ImportResource("springintegration/main.xml")
+@ComponentScan(basePackages = {"uk.gov.ons.ctp.integration.mockcaseapiservice"})
 @EnableCaching
 public class MockCaseApiServiceApplication {
 

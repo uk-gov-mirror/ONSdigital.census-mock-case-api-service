@@ -1,12 +1,3 @@
----
-apiVersion: cloud.google.com/v1beta1
-kind: BackendConfig
-metadata:
-  name: mockcaseapiingress
-spec:
-  securityPolicy:
-    name: "mockcaseapi-ingress"
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -16,7 +7,7 @@ metadata:
   labels:
     app: mockcaseapi
 spec:
-  type: NodePort
+  type: ClusterIP
   externalTrafficPolicy: Cluster
   ports:
   - name: http
@@ -24,18 +15,3 @@ spec:
     targetPort: http-server
   selector:
     app: mockcaseapi
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: mockcaseapiingress
-  labels:
-    app: mockcaseapi
-  annotations:
-    kubernetes.io/ingress.allow-http: "false"
-    kubernetes.io/ingress.global-static-ip-name: mockcaseapi
-    ingress.gcp.kubernetes.io/pre-shared-cert: mockcaseapi
-spec:
-  backend:
-    serviceName: mockcaseapi
-    servicePort: 80
