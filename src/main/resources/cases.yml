@@ -21,7 +21,20 @@ casedata:
        "lsoa": "x1",
        "msoa": "x2",
        "lad": "H1",
-       "caseEvents": [],
+       "caseEvents": [
+        {
+          "id": "101",
+          "eventType": "CASE_UPDATED",
+          "description": "Initial creation of case",
+          "createdDateTime": "2019-04-14T13:45:26.564+01:00"
+        },
+        {
+          "id": "102",
+          "eventType": null,
+          "description": "Create Household Visit",
+          "createdDateTime": "2019-04-14T13:45:26.564+01:00"
+        }
+        ],
        "id": "3305e937-6fb1-4ce1-9d4c-077f147789ac",
        "caseType": "HH",
        "region": "E",
@@ -35,7 +48,7 @@ casedata:
        "estabArid": "AABBCC",
        "estabType": "ET",
        "uprn": "1347459999",
-       "createdDateTime": "2019-04-14T13:45:26.564+01:00",
+       "createdDateTime": "2019-04-15T13:45:26.564+01:00",
        "addressLine1": "Napier House",
        "addressLine2": "88 Harbour Street",
        "addressLine3": "Parkhead",
@@ -50,7 +63,20 @@ casedata:
        "lsoa": "x1",
        "msoa": "x2",
        "lad": "H1",
-       "caseEvents": [],
+       "caseEvents": [
+        {
+          "id": "201",
+          "eventType": "CASE_CREATED",
+          "description": "Initial creation of case",
+          "createdDateTime": "2019-04-15T13:45:26.564+01:00"
+        },
+        {
+          "id": "202",
+          "eventType": "CASE_UPDATED",
+          "description": "Create Household Visit",
+          "createdDateTime": "2019-04-15T13:45:26.564+01:00"
+        }
+        ],
        "id": "3305e937-6fb1-4ce1-9d4c-077f147789ab",
        "caseType": "HH",
        "region": "E",
