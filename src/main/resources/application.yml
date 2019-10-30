@@ -53,34 +53,3 @@ spring:
   application:
     name: ONS CensusMockCaseApiService
 
-
-address-index-settings:
-  address-query-path: /addresses
-  postcode-lookup-path: /addresses/postcode/{postcode}
-  rest-client-config:
-    scheme: http
-    host: addressindex-api-beta.apps.devtest.onsclofo.uk
-    port: 80
-    
-case-service-settings:
-  case-by-id-query-path: /cases/{case-id}
-  case-by-uprn-query-path: /cases/uprn/{uprn}
-  case-by-case-reference-query-path: /cases/ref/{reference}
-  rest-client-config:
-    username: serco_cks
-    password: temporary
-    scheme: http
-    host: localhost
-    port: 8171
-
-rabbitmq:
-  username: guest
-  password: guest
-  host: localhost
-  port: 35672
-  virtual-host: /
-report-settings:
-  cron-expression: "0 * * * * *"
-
-
-
