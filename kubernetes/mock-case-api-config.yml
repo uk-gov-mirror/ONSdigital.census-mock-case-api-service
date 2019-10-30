@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: mock-case-api-config
 data:
-  rabbitmq-host: "10.160.0.27"
+  rabbitmq-host: "10.160.0.15"
   rabbitmq-port: "5672"

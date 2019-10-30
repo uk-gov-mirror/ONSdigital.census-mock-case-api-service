@@ -64,12 +64,12 @@ spec:
         - name: RABBITMQ_USERNAME
           valueFrom:
             secretKeyRef:
-              name: rabbit-identity
+              name: fs-rabbit-identity
               key: username
         - name: RABBITMQ_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: rabbit-identity
+              name: fs-rabbit-identity
               key: password
         - name: RABBITMQ_HOST
           valueFrom:

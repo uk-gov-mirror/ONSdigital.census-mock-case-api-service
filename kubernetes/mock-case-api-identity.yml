@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mock-case-api-identity
+type: Opaque
+stringData:
+  username: fred
+  password: flintstone
