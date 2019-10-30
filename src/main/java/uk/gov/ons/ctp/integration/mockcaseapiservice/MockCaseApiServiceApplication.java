@@ -11,7 +11,7 @@ import uk.gov.ons.ctp.common.jackson.CustomObjectMapper;
 
 /** The 'main' entry point for the ContactCentre Svc SpringBoot Application. */
 @SpringBootApplication
-@ComponentScan(basePackages = {"uk.gov.ons.ctp.integration"})
+@ComponentScan(basePackages = {"uk.gov.ons.ctp.integration.mockcaseapiservice"})
 @EnableCaching
 public class MockCaseApiServiceApplication {
 
