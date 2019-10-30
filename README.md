@@ -1,10 +1,10 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3ba6416fd11d41fdaf281e7dab6042dc)](https://www.codacy.com/app/philwhiles/census-contact-centre-service?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ONSdigital/census-contact-centre-service&amp;utm_campaign=Badge_Grade)
-[![Build Status](https://travis-ci.com/ONSdigital/census-contact-centre-service.svg?branch=master)](https://travis-ci.com/ONSdigital/census-contact-centre-service)
-[![codecov](https://codecov.io/gh/ONSdigital/census-contact-centre-service/branch/master/graph/badge.svg)](https://codecov.io/gh/ONSdigital/census-contact-centre-service)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3ba6416fd11d41fdaf281e7dab6042dc)](https://www.codacy.com/app/philwhiles/census-mock-case-api-service?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ONSdigital/census-mock-case-api-service&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.com/ONSdigital/census-mock-case-api-service.svg?branch=master)](https://travis-ci.com/ONSdigital/census-mock-case-api-service)
+[![codecov](https://codecov.io/gh/ONSdigital/census-mock-case-api-service/branch/master/graph/badge.svg)](https://codecov.io/gh/ONSdigital/census-mock-case-api-service)
 
-# Contact Centre Data Service
-This repository contains the Contact Centre Data service. This microservice is a RESTful web service implemented using [Spring Boot](http://projects.spring.io/spring-boot/). It manages contact centre data, where a Contact Centre Data object represents an expected response from the Contact Centre Data service, which provides all the data that is required by Contact Centre in order for it to verify the contact centre's UAC code and connect them to the relevant EQ questionnaire.
-
+# Census Mock Case API Service
+This repository is a test service and can be run instead of the case api service to test other services. It returns cases and questionnaires that are stored as JSON in 2 yml files 
+(cases.yml and questionnaires.yml) in the resources folder of the project. The project facilitates testing of services that rely on the real case api services, currently the contact centre service and filed services. 
 
 ## Set Up
 
@@ -32,7 +32,11 @@ This will create the JAR file in the Target directory. You can then right-click 
 
 When running successfully version information can be obtained from the info endpoint
     
-* localhost:8171/info
+* localhost:8161/cases/info
+
+Data examples can be viewed from the examples endpoint
+
+* localhost:8161/cases/examples
     
 ## Docker image build
 

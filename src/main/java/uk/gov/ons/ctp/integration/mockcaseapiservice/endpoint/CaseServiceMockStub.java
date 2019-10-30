@@ -93,7 +93,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     log.with("uprn", uprn).debug("Entering findCaseByUPRN");
 
     FailureSimulator.optionallyTriggerFailure(Long.toString(uprn.getValue()), 400, 401, 404, 500);
-    List<CaseContainerDTO> cases = casesConfig.getCaseByUprn(uprn.toString());
+    List<CaseContainerDTO> cases = casesConfig.getCaseByUprn(Long.toString(uprn.getValue()));
     nullTestThrowsException(cases);
     return ResponseEntity.ok(cases);
   }
