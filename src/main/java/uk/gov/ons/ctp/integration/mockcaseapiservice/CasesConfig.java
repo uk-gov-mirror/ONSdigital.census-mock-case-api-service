@@ -45,11 +45,13 @@ public class CasesConfig {
           caseUprnMap.get(c.getUprn()).add(c);
           if (!c.getCaseEvents().isEmpty()) {
             if (!eventMap.containsKey(c.getId().toString())) {
-                eventMap.put(c.getId().toString(), new ArrayList<>());
+              eventMap.put(c.getId().toString(), new ArrayList<>());
             }
-            c.getCaseEvents().forEach( ev -> {
-                eventMap.get(c.getId().toString()).add(ev);
-            });
+            c.getCaseEvents()
+                .forEach(
+                    ev -> {
+                      eventMap.get(c.getId().toString()).add(ev);
+                    });
             c.getCaseEvents().clear();
           }
         });
@@ -68,7 +70,7 @@ public class CasesConfig {
   }
 
   public List<EventDTO> getEventsByCaseID(final String key) {
-      return eventMap.getOrDefault(key, new ArrayList<>());
+    return eventMap.getOrDefault(key, new ArrayList<>());
   }
 
   @Override

@@ -3,7 +3,6 @@ package uk.gov.ons.ctp.integration.mockcaseapiservice.endpoint;
 import com.godaddy.logging.Logger;
 import com.godaddy.logging.LoggerFactory;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
@@ -126,6 +125,6 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     if (!includeCaseEvents) {
       return caseEvents;
     }
-   return casesConfig.getEventsByCaseID(caseID);
+    return casesConfig.getEventsByCaseID(caseID);
   }
 }
