@@ -2,27 +2,27 @@ package uk.gov.ons.ctp.integration.mockcaseapiservice.endpoint;
 
 import com.godaddy.logging.Logger;
 import com.godaddy.logging.LoggerFactory;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uk.gov.ons.ctp.common.endpoint.CTPEndpoint;
 import uk.gov.ons.ctp.common.error.CTPException;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.CaseRequestDTO;
+import uk.gov.ons.ctp.integration.contactcentresvc.representation.ResponseDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.model.UniquePropertyReferenceNumber;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.CasesConfig;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.QuestionnairesConfig;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.utility.FailureSimulator;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /** Provides mock endpoints for the case service. */
 @RestController
@@ -127,4 +127,23 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     }
     return casesConfig.getEventsByCaseID(caseID);
   }
+
+  /**
+   * Post a list of Cases in order to overwrite the case maps driving the responses here.
+   * @param requestBody - a list of cases
+   * @return - response confirming post.
+   */
+  @RequestMapping(value = "/refresh", method = RequestMethod.POST)
+  @ResponseStatus(value = HttpStatus.OK)
+  public ResponseEntity<ResponseDTO> fulfilmentUnresolvedRequestByPost(
+    @Valid @RequestBody List<CaseContainerDTO> requestBody) {
+
+    log.with("requestBody", requestBody).info("Entering POST refreshData");
+    casesConfig.refreshData(requestBody);
+
+    ResponseDTO responseDTO = new ResponseDTO();
+    responseDTO.setId("MockCasePostService");
+    responseDTO.setDateTime(new Date());
+    return ResponseEntity.ok(responseDTO);
+    }
 }
