@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 
 @Configuration
 @EnableConfigurationProperties
@@ -23,6 +24,7 @@ public class CasesConfig {
   private Map<String, CaseContainerDTO> caseUUIDMap = new HashMap<>();
   private Map<String, CaseContainerDTO> caseRefMap = new HashMap<>();
   private Map<String, List<CaseContainerDTO>> caseUprnMap = new HashMap<>();
+  private Map<String, List<EventDTO>> eventMap = new HashMap<>();
 
   public String getCases() {
     return cases;
@@ -41,6 +43,17 @@ public class CasesConfig {
             caseUprnMap.put(c.getUprn(), new ArrayList<>());
           }
           caseUprnMap.get(c.getUprn()).add(c);
+          if (!c.getCaseEvents().isEmpty()) {
+            if (!eventMap.containsKey(c.getId().toString())) {
+              eventMap.put(c.getId().toString(), new ArrayList<>());
+            }
+            c.getCaseEvents()
+                .forEach(
+                    ev -> {
+                      eventMap.get(c.getId().toString()).add(ev);
+                    });
+            c.getCaseEvents().clear();
+          }
         });
   }
 
@@ -54,6 +67,10 @@ public class CasesConfig {
 
   public List<CaseContainerDTO> getCaseByUprn(final String key) {
     return caseUprnMap.getOrDefault(key, null);
+  }
+
+  public List<EventDTO> getEventsByCaseID(final String key) {
+    return eventMap.getOrDefault(key, new ArrayList<>());
   }
 
   @Override

@@ -3,7 +3,6 @@ package uk.gov.ons.ctp.integration.mockcaseapiservice.endpoint;
 import com.godaddy.logging.Logger;
 import com.godaddy.logging.LoggerFactory;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
@@ -65,7 +64,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     FailureSimulator.optionallyTriggerFailure(caseId.toString(), 400, 401, 404, 500);
     CaseContainerDTO caseDetails = casesConfig.getCaseByUUID(caseId.toString());
     nullTestThrowsException(caseDetails);
-    caseDetails.setCaseEvents(getCaseEvents(includeCaseEvents, caseDetails.getCreatedDateTime()));
+    caseDetails.setCaseEvents(getCaseEvents(caseDetails.getId().toString(), includeCaseEvents));
     return ResponseEntity.ok(caseDetails);
   }
 
@@ -111,7 +110,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     CaseContainerDTO caseDetails = casesConfig.getCaseByRef(Long.toString(ref));
     nullTestThrowsException(caseDetails);
     caseDetails.setCaseEvents(
-        getCaseEvents(requestParamsDTO.getCaseEvents(), caseDetails.getCreatedDateTime()));
+        getCaseEvents(caseDetails.getId().toString(), requestParamsDTO.getCaseEvents()));
     return ResponseEntity.ok(caseDetails);
   }
 
@@ -121,26 +120,11 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     }
   }
 
-  private List<EventDTO> getCaseEvents(final boolean includeCaseEvents, final Date createdDate) {
+  private List<EventDTO> getCaseEvents(final String caseID, final boolean includeCaseEvents) {
     final List<EventDTO> caseEvents = new ArrayList<>();
     if (!includeCaseEvents) {
       return caseEvents;
     }
-
-    final EventDTO e1 = new EventDTO();
-    e1.setId("101");
-    e1.setDescription("Initial creation of case");
-    e1.setEventType("CASE_CREATED");
-    e1.setCreatedDateTime(createdDate);
-
-    final EventDTO e2 = new EventDTO();
-    e2.setId("102");
-    e2.setDescription("Create Household Visit");
-    e1.setEventType("CASE_UPDATED");
-    e2.setCreatedDateTime(createdDate);
-
-    caseEvents.add(e1);
-    caseEvents.add(e2);
-    return caseEvents;
+    return casesConfig.getEventsByCaseID(caseID);
   }
 }
