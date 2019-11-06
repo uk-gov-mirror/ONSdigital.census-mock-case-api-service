@@ -2,15 +2,17 @@ package uk.gov.ons.ctp.integration.mockcaseapiservice;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 @EnableConfigurationProperties
@@ -18,27 +20,62 @@ import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireI
 @ConfigurationProperties("questionnairedata")
 public class QuestionnairesConfig {
 
-  private String questionnaires;
-  private Map<String, QuestionnaireIdDTO> questionnaireMap = new HashMap<>();
+    private String questionnaires;
+    private final Map<String, QuestionnaireIdDTO> questionnaireMap = Collections.synchronizedMap(new HashMap<>());
 
-  public String getQuestionnaires() {
-    return questionnaires;
-  }
+    public String getQuestionnaires() {
+        return questionnaires;
+    }
 
-  public void setQuestionnaires(String questionnaires) throws IOException {
-    this.questionnaires = questionnaires;
-    final ObjectMapper objectMapper = new ObjectMapper();
-    final List<QuestionnaireIdDTO> questionnaireIdDTOList =
-        objectMapper.readValue(questionnaires, new TypeReference<List<QuestionnaireIdDTO>>() {});
-    questionnaireIdDTOList.forEach(q -> questionnaireMap.put(q.getQuestionnaireId(), q));
-  }
+    public void setQuestionnaires(String questionnaires) throws IOException {
+        this.questionnaires = questionnaires;
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final List<QuestionnaireIdDTO> questionnaireIdDTOList =
+                objectMapper.readValue(questionnaires, new TypeReference<List<QuestionnaireIdDTO>>() {
+                });
+        addData(questionnaireIdDTOList);
+    }
 
-  public QuestionnaireIdDTO getQuestionnaire(final String key) {
-    return questionnaireMap.getOrDefault(key, null);
-  }
+    /**
+     *  add data in the  maps from a list of Questionnaires
+     *
+     * @param questionnaireIdDTOList - list of questionnaires
+     */
+    public void addData(List<QuestionnaireIdDTO> questionnaireIdDTOList) {
+        questionnaireIdDTOList.forEach(q -> {
+            if (!questionnaireMap.containsKey(q.getQuestionnaireId())) {
+                updateMaps(q);
+            }
+        });
+    }
 
-  @Override
-  public String toString() {
-    return "{" + getQuestionnaires() + "}";
-  }
+    /**
+     * Update map from a questionnaire
+     * @param questionnaire - a questionnaire
+     */
+    private synchronized void updateMaps(final QuestionnaireIdDTO questionnaire) {
+        synchronized (questionnaireMap) {
+            questionnaireMap.put(questionnaire.getQuestionnaireId(), questionnaire);
+        }
+    }
+
+    /**
+     * Reset the data maps back to the original JSON
+     * @throws IOException - thrown
+     */
+    public synchronized void resetData() throws IOException {
+        synchronized (questionnaireMap) {
+            questionnaireMap.clear();
+            setQuestionnaires(questionnaires);
+        }
+    }
+
+    public QuestionnaireIdDTO getQuestionnaire(final String key) {
+        return questionnaireMap.getOrDefault(key, null);
+    }
+
+    @Override
+    public String toString() {
+        return "{" + getQuestionnaires() + "}";
+    }
 }

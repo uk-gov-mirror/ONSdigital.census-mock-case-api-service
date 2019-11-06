@@ -10,10 +10,7 @@ import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerD
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Configuration
 @EnableConfigurationProperties
@@ -21,79 +18,117 @@ import java.util.Map;
 @ConfigurationProperties("casedata")
 public class CasesConfig {
 
-  private String cases;
-  private Map<String, CaseContainerDTO> caseUUIDMap = new HashMap<>();
-  private Map<String, CaseContainerDTO> caseRefMap = new HashMap<>();
-  private Map<String, List<CaseContainerDTO>> caseUprnMap = new HashMap<>();
-  private Map<String, List<EventDTO>> eventMap = new HashMap<>();
+    private String cases;
+    private final Map<String, CaseContainerDTO> caseUUIDMap = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, CaseContainerDTO> caseRefMap = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, List<CaseContainerDTO>> caseUprnMap = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, List<EventDTO>> eventMap = Collections.synchronizedMap(new HashMap<>());
 
-  public String getCases() {
-    return cases;
-  }
+    public String getCases() {
+        return cases;
+    }
 
     /**
      * Sets cases from the JSON into a list of Case container DTOs
+     *
      * @param cases - JSON String
      * @throws IOException - Thrown when Object Mapper errors
      */
-  public void setCases(final String cases) throws IOException {
-    this.cases = cases;
-    final ObjectMapper objectMapper = new ObjectMapper();
-    final List<CaseContainerDTO> caseList =
-        objectMapper.readValue(cases, new TypeReference<List<CaseContainerDTO>>() {});
-    refreshData(caseList);
-  }
+    public void setCases(final String cases) throws IOException {
+        this.cases = cases;
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final List<CaseContainerDTO> caseList =
+                objectMapper.readValue(cases, new TypeReference<List<CaseContainerDTO>>() {
+                });
+        addData(caseList);
+    }
 
-  public CaseContainerDTO getCaseByUUID(final String key) {
-    return caseUUIDMap.getOrDefault(key, null);
-  }
+    public CaseContainerDTO getCaseByUUID(final String key) {
+        return caseUUIDMap.getOrDefault(key, null);
+    }
 
-  public CaseContainerDTO getCaseByRef(final String key) {
-    return caseRefMap.getOrDefault(key, null);
-  }
+    public CaseContainerDTO getCaseByRef(final String key) {
+        return caseRefMap.getOrDefault(key, null);
+    }
 
-  public List<CaseContainerDTO> getCaseByUprn(final String key) {
-    return caseUprnMap.getOrDefault(key, null);
-  }
+    public List<CaseContainerDTO> getCaseByUprn(final String key) {
+        return caseUprnMap.getOrDefault(key, null);
+    }
 
-  public List<EventDTO> getEventsByCaseID(final String key) {
-    return eventMap.getOrDefault(key, new ArrayList<>());
-  }
+    public List<EventDTO> getEventsByCaseID(final String key) {
+        return eventMap.getOrDefault(key, new ArrayList<>());
+    }
 
     /**
-     * refresh the date in the case maps from a list of Cases
+     *  add data in the case maps from a list of Cases
+     *
      * @param caseList - list of cases
      */
-  public synchronized void refreshData(final List<CaseContainerDTO> caseList) {
-      caseUprnMap.clear();
-      caseUUIDMap.clear();
-      caseRefMap.clear();
-      eventMap.clear();
+    public void addData(final List<CaseContainerDTO> caseList) {
 
-      caseList.forEach(
-              c -> {
-                  caseUUIDMap.put(c.getId().toString(), c);
-                  caseRefMap.put(c.getCaseRef(), c);
-                  if (!caseUprnMap.containsKey(c.getUprn())) {
-                      caseUprnMap.put(c.getUprn(), new ArrayList<>());
-                  }
-                  caseUprnMap.get(c.getUprn()).add(c);
-                  if (!c.getCaseEvents().isEmpty()) {
-                      if (!eventMap.containsKey(c.getId().toString())) {
-                          eventMap.put(c.getId().toString(), new ArrayList<>());
-                      }
-                      c.getCaseEvents()
-                              .forEach(
-                                      ev -> {
-                                          eventMap.get(c.getId().toString()).add(ev);
-                                      });
-                      c.getCaseEvents().clear();
-                  }
-              });
-  }
+        caseList.forEach(
+                caseDetails -> {
+                    if (!caseRefMap.containsKey(caseDetails.getCaseRef())) {
+                        updateMaps(caseDetails);
+                    }
+                });
+    }
 
-  @Override
-  public String toString() {
-    return "{" + getCases() + "}";
-  }
+    /**
+     * Reset the data maps back to the original JSON
+     * @throws IOException - thrown
+     */
+    public synchronized void resetData() throws IOException {
+        synchronized (caseUUIDMap) {
+            caseUUIDMap.clear();
+        }
+        synchronized (caseUprnMap) {
+            caseUprnMap.clear();
+        }
+        synchronized (eventMap) {
+            eventMap.clear();
+        }
+        synchronized (caseRefMap) {
+            caseRefMap.clear();
+            setCases(cases);
+        }
+    }
+
+    /**
+     * Update maps from a case
+     * @param caseDetails - a case
+     */
+    private synchronized void updateMaps(final CaseContainerDTO caseDetails) {
+
+        synchronized (caseUUIDMap) {
+            caseUUIDMap.put(caseDetails.getId().toString(), caseDetails);
+        }
+        synchronized (caseRefMap) {
+            caseRefMap.put(caseDetails.getCaseRef(), caseDetails);
+        }
+        synchronized (caseUprnMap) {
+            if (!caseUprnMap.containsKey(caseDetails.getUprn())) {
+                caseUprnMap.put(caseDetails.getUprn(), new ArrayList<>());
+            }
+            caseUprnMap.get(caseDetails.getUprn()).add(caseDetails);
+        }
+        synchronized (eventMap) {
+            if (!caseDetails.getCaseEvents().isEmpty()) {
+                if (!eventMap.containsKey(caseDetails.getId().toString())) {
+                    eventMap.put(caseDetails.getId().toString(), new ArrayList<>());
+                }
+                caseDetails.getCaseEvents()
+                        .forEach(
+                                ev ->
+                                    eventMap.get(caseDetails.getId().toString()).add(ev)
+                                );
+                caseDetails.getCaseEvents().clear();
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "{" + getCases() + "}";
+    }
 }

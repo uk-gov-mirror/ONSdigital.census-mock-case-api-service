@@ -10,8 +10,8 @@ spec:
   type: ClusterIP
   externalTrafficPolicy: Cluster
   ports:
-  - name: http
-    port: 80
-    targetPort: http-server
+    - name: http
+      port: 80
+      targetPort: http-server
   selector:
     app: mockcaseapi
