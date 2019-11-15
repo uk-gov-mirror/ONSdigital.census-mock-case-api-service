@@ -11,6 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import uk.gov.ons.ctp.common.error.CTPException;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
 
 @Configuration
@@ -27,7 +28,7 @@ public class QuestionnairesConfig {
     return questionnaires;
   }
 
-  public void setQuestionnaires(String questionnaires) throws IOException {
+  public void setQuestionnaires(String questionnaires) throws IOException, CTPException {
     this.questionnaires = questionnaires;
     final ObjectMapper objectMapper = new ObjectMapper();
     final List<QuestionnaireIdDTO> questionnaireIdDTOList =
@@ -40,13 +41,16 @@ public class QuestionnairesConfig {
    *
    * @param questionnaireIdDTOList - list of questionnaires
    */
-  public void addData(List<QuestionnaireIdDTO> questionnaireIdDTOList) {
-    questionnaireIdDTOList.forEach(
-        q -> {
-          if (!questionnaireMap.containsKey(q.getQuestionnaireId())) {
-            updateMaps(q);
-          }
-        });
+  public void addData(final List<QuestionnaireIdDTO> questionnaireIdDTOList) throws CTPException {
+    for (QuestionnaireIdDTO q : questionnaireIdDTOList) {
+      if (questionnaireMap.containsKey(q.getQuestionnaireId())) {
+        throw new CTPException(
+                CTPException.Fault.BAD_REQUEST,
+                "Duplicate questionnaire ID: " + q.getQuestionnaireId() + " unable to update maps");
+      } else {
+        updateMaps(q);
+      }
+    }
   }
 
   /**
@@ -65,7 +69,7 @@ public class QuestionnairesConfig {
    *
    * @throws IOException - thrown
    */
-  public synchronized void resetData() throws IOException {
+  public synchronized void resetData() throws IOException, CTPException {
     synchronized (questionnaireMap) {
       questionnaireMap.clear();
       setQuestionnaires(questionnaires);

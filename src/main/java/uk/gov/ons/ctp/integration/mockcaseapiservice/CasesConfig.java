@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import uk.gov.ons.ctp.common.error.CTPException;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 
@@ -40,7 +41,7 @@ public class CasesConfig {
    * @param cases - JSON String
    * @throws IOException - Thrown when Object Mapper errors
    */
-  public void setCases(final String cases) throws IOException {
+  public void setCases(final String cases) throws IOException, CTPException {
     this.cases = cases;
     final ObjectMapper objectMapper = new ObjectMapper();
     final List<CaseContainerDTO> caseList =
@@ -69,14 +70,18 @@ public class CasesConfig {
    *
    * @param caseList - list of cases
    */
-  public void addData(final List<CaseContainerDTO> caseList) {
+  public void addData(final List<CaseContainerDTO> caseList) throws CTPException {
 
-    caseList.forEach(
-        caseDetails -> {
-          if (!caseUUIDMap.containsKey(caseDetails.getId().toString())) {
-            updateMaps(caseDetails);
-          }
-        });
+    for (CaseContainerDTO caseDetails: caseList) {
+      if (caseUUIDMap.containsKey(caseDetails.getId().toString())) {
+        throw new CTPException(
+                CTPException.Fault.BAD_REQUEST,
+                "Duplicate case UUID: " + caseDetails.getId().toString()   + " unable to update maps");
+      }
+      else {
+        updateMaps(caseDetails);
+      }
+    }
   }
 
   /**
@@ -84,7 +89,7 @@ public class CasesConfig {
    *
    * @throws IOException - thrown
    */
-  public synchronized void resetData() throws IOException {
+  public synchronized void resetData() throws IOException, CTPException {
     synchronized (caseUUIDMap) {
       caseUUIDMap.clear();
     }

@@ -142,7 +142,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
    */
   @RequestMapping(value = "/data/cases/add", method = RequestMethod.POST)
   @ResponseStatus(value = HttpStatus.OK)
-  public ResponseEntity<ResponseDTO> addCaseData(@RequestBody List<CaseContainerDTO> requestBody) {
+  public ResponseEntity<ResponseDTO> addCaseData(@RequestBody List<CaseContainerDTO> requestBody) throws CTPException {
 
     log.with("requestBody", requestBody).info("Entering POST addCData");
     casesConfig.addData(requestBody);
@@ -177,7 +177,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   @RequestMapping(value = "/data/questionnaires/add", method = RequestMethod.POST)
   @ResponseStatus(value = HttpStatus.OK)
   public ResponseEntity<ResponseDTO> addQuestionnaireData(
-      @Valid @RequestBody List<QuestionnaireIdDTO> requestBody) {
+      @Valid @RequestBody List<QuestionnaireIdDTO> requestBody) throws CTPException {
 
     log.with("requestBody", requestBody).info("Entering POST addQData");
     questionnairesConfig.addData(requestBody);
