@@ -72,13 +72,12 @@ public class CasesConfig {
    */
   public void addData(final List<CaseContainerDTO> caseList) throws CTPException {
 
-    for (CaseContainerDTO caseDetails: caseList) {
+    for (CaseContainerDTO caseDetails : caseList) {
       if (caseUUIDMap.containsKey(caseDetails.getId().toString())) {
         throw new CTPException(
-                CTPException.Fault.BAD_REQUEST,
-                "Duplicate case UUID: " + caseDetails.getId().toString()   + " unable to update maps");
-      }
-      else {
+            CTPException.Fault.BAD_REQUEST,
+            "Duplicate case UUID: " + caseDetails.getId().toString() + " unable to update maps");
+      } else {
         updateMaps(caseDetails);
       }
     }

@@ -45,8 +45,8 @@ public class QuestionnairesConfig {
     for (QuestionnaireIdDTO q : questionnaireIdDTOList) {
       if (questionnaireMap.containsKey(q.getQuestionnaireId())) {
         throw new CTPException(
-                CTPException.Fault.BAD_REQUEST,
-                "Duplicate questionnaire ID: " + q.getQuestionnaireId() + " unable to update maps");
+            CTPException.Fault.BAD_REQUEST,
+            "Duplicate questionnaire ID: " + q.getQuestionnaireId() + " unable to update maps");
       } else {
         updateMaps(q);
       }
