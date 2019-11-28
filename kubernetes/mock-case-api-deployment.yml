@@ -5,7 +5,7 @@ metadata:
   labels:
     app: mockcaseapi
 spec:
-  replicas: 1
+  replicas: [REPLICAS]
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -18,38 +18,38 @@ spec:
         app: mockcaseapi
     spec:
       containers:
-        - name: mockcaseapi
-          image: eu.gcr.io/census-int-ci/census-mock-case-api-service:latest
-          imagePullPolicy: Always
-          resources:
-            requests:
-              cpu: "1000m"
-              memory: "2048Mi"
-            limits:
-              cpu: "1000m"
-              memory: "2048Mi"
-          readinessProbe:
-            httpGet:
-              path: /info
-              port: 8161
-            initialDelaySeconds: 20
-            periodSeconds: 10
-            failureThreshold: 3
-            successThreshold: 1
-          livenessProbe:
-            httpGet:
-              path: /info
-              port: 8161
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            failureThreshold: 3
-            successThreshold: 1
-          ports:
-            - name: http-server
-              containerPort: 8161
-          env:
-            - name: JAVA_TOOL_OPTIONS
-              value: "-Dlogging.useJson=true
+      - name: mockcaseapi
+        image: eu.gcr.io/census-int-ci/census-mock-case-api-service:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "1000m"
+            memory: "2048Mi"
+          limits:
+            cpu: "1000m"
+            memory: "2048Mi"
+        readinessProbe:
+          httpGet:
+            path: /info
+            port: 8161
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+        livenessProbe:
+          httpGet:
+            path: /info
+            port: 8161
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+        ports:
+        - name: http-server
+          containerPort: 8161
+        env:
+        - name: JAVA_TOOL_OPTIONS
+          value: "-Dlogging.useJson=true
             -Dlogging.level.uk.gov.ons.ctp=DEBUG
             -Dlogging.level.org.springframework=WARN
             -Dendpoints.autoconfig.enabled=false-Dendpoints.beans.enabled=false
