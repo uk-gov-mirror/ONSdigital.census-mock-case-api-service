@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: mockcaseapi
-        image: eu.gcr.io/census-gcr-int/census-mock-case-api-service:[CONTAINER_VERSION]
+        image: eu.gcr.io/[GCR]/census-mock-case-api-service:[CONTAINER_VERSION]
         imagePullPolicy: Always
         resources:
           requests:
