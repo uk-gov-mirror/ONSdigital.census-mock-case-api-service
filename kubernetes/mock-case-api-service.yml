@@ -8,7 +8,6 @@ metadata:
     app: mockcaseapi
 spec:
   type: ClusterIP
-  externalTrafficPolicy: Cluster
   ports:
   - name: http
     port: 80
