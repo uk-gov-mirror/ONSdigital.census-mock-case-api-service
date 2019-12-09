@@ -2,24 +2,30 @@ package uk.gov.ons.ctp.integration.mockcaseapiservice.endpoint;
 
 import com.godaddy.logging.Logger;
 import com.godaddy.logging.LoggerFactory;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.ons.ctp.common.endpoint.CTPEndpoint;
 import uk.gov.ons.ctp.common.error.CTPException;
+import uk.gov.ons.ctp.common.model.UniquePropertyReferenceNumber;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.CaseRequestDTO;
-import uk.gov.ons.ctp.integration.contactcentresvc.representation.model.UniquePropertyReferenceNumber;
+import uk.gov.ons.ctp.integration.contactcentresvc.representation.ResponseDTO;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.CasesConfig;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.QuestionnairesConfig;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.utility.FailureSimulator;
@@ -126,5 +132,81 @@ public final class CaseServiceMockStub implements CTPEndpoint {
       return caseEvents;
     }
     return casesConfig.getEventsByCaseID(caseID);
+  }
+
+  /**
+   * Post a list of Cases in order to add to the case maps driving the responses here.
+   *
+   * @param requestBody - a list of cases
+   * @return - response confirming post.
+   */
+  @RequestMapping(value = "/data/cases/add", method = RequestMethod.POST)
+  @ResponseStatus(value = HttpStatus.OK)
+  public ResponseEntity<ResponseDTO> addCaseData(@RequestBody List<CaseContainerDTO> requestBody)
+      throws CTPException {
+
+    log.with("requestBody", requestBody).info("Entering POST addCData");
+    casesConfig.addData(requestBody);
+
+    return ResponseEntity.ok(createResponseDTO("MockCaseAddService"));
+  }
+
+  /**
+   * reset the application case data back to the original JSON
+   *
+   * @return - response confirming success.
+   */
+  @RequestMapping(value = "/data/cases/reset", method = RequestMethod.GET)
+  @ResponseStatus(value = HttpStatus.OK)
+  public ResponseEntity<ResponseDTO> resetCaseData() throws CTPException {
+    try {
+      casesConfig.resetData();
+      return ResponseEntity.ok(createResponseDTO("MockCaseResetService"));
+    } catch (IOException e) {
+      throw new CTPException(
+          CTPException.Fault.BAD_REQUEST, "Unable to reset Case Data - IO Exception  reading JSON");
+    }
+  }
+
+  /**
+   * Post a list of Questionnaires in order to add to the questionnaire maps driving the responses
+   * here.
+   *
+   * @param requestBody - a list of Questionnaires
+   * @return - response confirming post.
+   */
+  @RequestMapping(value = "/data/questionnaires/add", method = RequestMethod.POST)
+  @ResponseStatus(value = HttpStatus.OK)
+  public ResponseEntity<ResponseDTO> addQuestionnaireData(
+      @Valid @RequestBody List<QuestionnaireIdDTO> requestBody) throws CTPException {
+
+    log.with("requestBody", requestBody).info("Entering POST addQData");
+    questionnairesConfig.addData(requestBody);
+    return ResponseEntity.ok(createResponseDTO("MockQuestionnaireAddService"));
+  }
+
+  /**
+   * reset the application data back to the original JSON
+   *
+   * @return - response confirming post.
+   */
+  @RequestMapping(value = "/data/questionnaires/reset", method = RequestMethod.GET)
+  @ResponseStatus(value = HttpStatus.OK)
+  public ResponseEntity<ResponseDTO> resetQuestionnaireData() throws CTPException {
+    try {
+      questionnairesConfig.resetData();
+      return ResponseEntity.ok(createResponseDTO("MockQuestionnaireResetService"));
+    } catch (IOException e) {
+      throw new CTPException(
+          CTPException.Fault.BAD_REQUEST,
+          "Unable to reset Questionnaire Data - IO Exception  reading JSON");
+    }
+  }
+
+  private ResponseDTO createResponseDTO(final String id) {
+    final ResponseDTO responseDTO = new ResponseDTO();
+    responseDTO.setId(id);
+    responseDTO.setDateTime(new Date());
+    return responseDTO;
   }
 }

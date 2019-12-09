@@ -26,14 +26,14 @@ management:
       base-path: /
   info:
     env:
-      enabled: true 
+      enabled: true
     build:
-      enabled: true 
+      enabled: true
     git:
-      mode: SIMPLE 
-      enabled: true 
+      mode: SIMPLE
+      enabled: true
     defaults:
-      enabled: true 
+      enabled: true
 
 server:
   port: 8161
@@ -42,11 +42,11 @@ spring:
   mvc:
     servlet:
       path: /
-  
-#  security:
-#    user:
-#      name: serco_cks
-#      password: temporary
+
+  #  security:
+  #    user:
+  #      name: serco_cks
+  #      password: temporary
   output:
     ansi:
       enabled: never
