@@ -7,7 +7,6 @@ This repository is a test service and can be run instead of the case api service
 (cases.yml and questionnaires.yml) in the resources folder of the project. The project facilitates testing of services that rely on the real case api services, currently the contact centre service and filed services. 
 
 ## Set Up
-
 Do the following steps to set up the code to run locally:
 * Install Java 11 locally
 * Make sure that you have a suitable settings.xml file in your local .m2 directory
