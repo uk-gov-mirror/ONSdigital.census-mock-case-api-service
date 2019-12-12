@@ -38,7 +38,6 @@ Data examples can be viewed from the examples endpoint
 * localhost:8161/cases/examples
     
 ## Docker image build
-
 Is switched off by default for clean deploy. Switch on with;
 
 * mvn dockerfile:build -Dskip.dockerfile=false
