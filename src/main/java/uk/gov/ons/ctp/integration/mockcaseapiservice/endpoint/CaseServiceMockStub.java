@@ -1,11 +1,10 @@
 package uk.gov.ons.ctp.integration.mockcaseapiservice.endpoint;
 
-import com.godaddy.logging.Logger;
-import com.godaddy.logging.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import com.godaddy.logging.Logger;
+import com.godaddy.logging.LoggerFactory;
 import uk.gov.ons.ctp.common.endpoint.CTPEndpoint;
 import uk.gov.ons.ctp.common.error.CTPException;
 import uk.gov.ons.ctp.common.model.UniquePropertyReferenceNumber;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.NewQuestionnaireIdDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.CaseRequestDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.ResponseDTO;
@@ -90,6 +92,50 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     QuestionnaireIdDTO questionnaireId = questionnairesConfig.getQuestionnaire(caseId.toString());
     nullTestThrowsException(questionnaireId);
     return ResponseEntity.ok(questionnaireId);
+  }
+
+  /**
+   * the GET endpoint to generate a new Questionnaire Id for a case.
+   *
+   * @param caseId to find by
+   * @return the new questionnaire id
+   * @throws CTPException something went wrong
+   */
+  @RequestMapping(value = "/{caseId}/qid", method = RequestMethod.GET)
+  public ResponseEntity<NewQuestionnaireIdDTO> newQuestionnaireIdForCase(
+      @PathVariable("caseId") final UUID caseId, @RequestParam(required = false) final boolean individual, 
+      @RequestParam(required = false) final UUID individualCaseId) throws CTPException {
+    log.with("case_id", caseId)
+        .with("individual", individual)
+        .with("individualCaseId", individualCaseId)
+        .debug("Entering newQuestionnaireIdForCase");
+
+    FailureSimulator.optionallyTriggerFailure(caseId.toString(), 400, 401, 404, 500);
+
+    CaseContainerDTO caseDetails = casesConfig.getCaseByUUID(caseId.toString());
+    nullTestThrowsException(caseDetails);
+
+    if (individual == false && individualCaseId != null) {
+      throw new IllegalStateException("Can't supply individualCaseId if not for an individual");
+    }
+    
+    if (caseDetails.getCaseType().contentEquals("CE") && individual == false) {
+      log.info("Generating new questionnaire ID for CE");
+    } else if (caseDetails.getCaseType().contentEquals("CE") && individual == true && individualCaseId == null) {
+      log.info("Generating new questionnaire ID for individual in CE");
+    } else if (caseDetails.getCaseType().contentEquals("HH") && individual == false) {
+      log.info("Generating new questionnaire ID for HH");
+    } else if (caseDetails.getCaseType().contentEquals("HH") && individual == true && individualCaseId != null) {
+      log.info("Generating new questionaire ID for individual in CE");
+    } else {
+      throw new IllegalStateException("Invalid combination of caseType, individual and individualCaseId");
+    }
+
+    NewQuestionnaireIdDTO newQuestionnaire = new NewQuestionnaireIdDTO();
+    newQuestionnaire.setQuestionnaireId(String.format("%010d", new Random().nextInt(Integer.MAX_VALUE)));
+    newQuestionnaire.setUac(UUID.randomUUID());
+
+    return ResponseEntity.ok(newQuestionnaire);
   }
 
   @RequestMapping(value = "/uprn/{uprn}", method = RequestMethod.GET)
