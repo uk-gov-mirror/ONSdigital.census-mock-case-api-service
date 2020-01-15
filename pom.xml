@@ -10,7 +10,7 @@
     <parent>
         <groupId>uk.gov.ons.ctp.integration</groupId>
         <artifactId>census-int-common-config</artifactId>
-        <version>0.0.8</version>
+        <version>0.0.13</version>
     </parent>
 
     <name>Census Mock Case API Service</name>
@@ -39,19 +39,34 @@
 
             <repositories>
                 <repository>
-                    <id>jcenter-repo</id>
-                    <url>http://artifactory-sdc.onsdigital.uk/artifactory/jcenter-cache/</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>central</id>
+                    <name>External Virtual Repository</name>
+                    <url>https://ons.jfrog.io/ons/external-repos</url>
                 </repository>
                 <repository>
-                    <id>release-repo</id>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>releases</id>
                     <name>libs-release</name>
-                    <url>http://artifactory-sdc.onsdigital.uk/artifactory/libs-release-local</url>
+                    <url>https://ons.jfrog.io/ons/libs-releases-local</url>
                 </repository>
                 <repository>
-                    <id>snapshot-repo</id>
-                    <url>http://artifactory-sdc.onsdigital.uk/artifactory/libs-snapshot-local/</url>
+                    <id>snapshots</id>
+                    <url>https://ons.jfrog.io/ons/libs-snapshots-local/</url>
                 </repository>
             </repositories>
+
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <name>External Virtual Repository</name>
+                    <url>https://ons.jfrog.io/ons/external-repos</url>
+                 </pluginRepository>
+            </pluginRepositories>
         </profile>
     </profiles>
 
@@ -124,32 +139,32 @@
         <dependency>
             <groupId>uk.gov.ons.ctp.integration.common</groupId>
             <artifactId>framework</artifactId>
-            <version>0.0.49</version>
+            <version>0.0.51</version>
         </dependency>
 
         <dependency>
             <groupId>uk.gov.ons.ctp.integration.common</groupId>
             <artifactId>test-framework</artifactId>
-            <version>0.0.4</version>
+            <version>0.0.11</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>uk.gov.ons.ctp.integration</groupId>
             <artifactId>contactcentreserviceapi</artifactId>
-            <version>0.0.50</version>
+            <version>0.0.53</version>
         </dependency>
 
         <dependency>
             <groupId>uk.gov.ons.ctp.integration.common</groupId>
             <artifactId>product-reference</artifactId>
-            <version>0.0.8</version>
+            <version>0.0.21</version>
         </dependency>
 
         <dependency>
             <groupId>uk.gov.ons.ctp.integration.common</groupId>
             <artifactId>census-int-case-api-client</artifactId>
-            <version>0.0.3</version>
+            <version>0.0.4</version>
         </dependency>
         <!-- ONS END -->
 
