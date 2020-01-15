@@ -8,6 +8,7 @@ language: java
 jdk: openjdk11
 
 before_install:
+  - cp .mvn.settings.xml $HOME/.m2/settings.xml
   - mvn fmt:check
 
 script:
