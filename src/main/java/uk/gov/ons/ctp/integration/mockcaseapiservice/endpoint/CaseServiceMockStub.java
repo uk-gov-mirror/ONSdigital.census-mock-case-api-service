@@ -24,7 +24,7 @@ import uk.gov.ons.ctp.common.error.CTPException;
 import uk.gov.ons.ctp.common.model.UniquePropertyReferenceNumber;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
-import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.NewQuestionnaireIdDTO;
+import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.SingleUseQuestionnaireIdDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.CaseRequestDTO;
 import uk.gov.ons.ctp.integration.contactcentresvc.representation.ResponseDTO;
@@ -102,7 +102,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
    * @throws CTPException something went wrong
    */
   @RequestMapping(value = "/{caseId}/qid", method = RequestMethod.GET)
-  public ResponseEntity<NewQuestionnaireIdDTO> newQuestionnaireIdForCase(
+  public ResponseEntity<SingleUseQuestionnaireIdDTO> newQuestionnaireIdForCase(
       @PathVariable("caseId") final UUID caseId,
       @RequestParam(required = false) final boolean individual,
       @RequestParam(required = false) final UUID individualCaseId)
@@ -121,24 +121,21 @@ public final class CaseServiceMockStub implements CTPEndpoint {
       throw new IllegalStateException("Can't supply individualCaseId if not for an individual");
     }
 
-    if (caseDetails.getCaseType().contentEquals("CE") && individual == false) {
+    String caseType = caseDetails.getCaseType();
+    if (caseType.equals("CE") && individual == false) {
       log.info("Generating new questionnaire ID for CE");
-    } else if (caseDetails.getCaseType().contentEquals("CE")
-        && individual == true
-        && individualCaseId == null) {
+    } else if (caseType.equals("CE") && individual == true && individualCaseId == null) {
       log.info("Generating new questionnaire ID for individual in CE");
-    } else if (caseDetails.getCaseType().contentEquals("HH") && individual == false) {
+    } else if (caseType.equals("HH") && individual == false) {
       log.info("Generating new questionnaire ID for HH");
-    } else if (caseDetails.getCaseType().contentEquals("HH")
-        && individual == true
-        && individualCaseId != null) {
+    } else if (caseType.equals("HH") && individual == true && individualCaseId != null) {
       log.info("Generating new questionaire ID for individual in CE");
     } else {
       throw new IllegalStateException(
           "Invalid combination of caseType, individual and individualCaseId");
     }
 
-    NewQuestionnaireIdDTO newQuestionnaire = new NewQuestionnaireIdDTO();
+    SingleUseQuestionnaireIdDTO newQuestionnaire = new SingleUseQuestionnaireIdDTO();
     newQuestionnaire.setQuestionnaireId(
         String.format("%010d", new Random().nextInt(Integer.MAX_VALUE)));
     newQuestionnaire.setUac(UUID.randomUUID());
