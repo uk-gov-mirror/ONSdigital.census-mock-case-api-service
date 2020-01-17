@@ -129,7 +129,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     } else if (caseType.equals("HH") && individual == false) {
       log.info("Generating new questionnaire ID for HH");
     } else if (caseType.equals("HH") && individual == true && individualCaseId != null) {
-      log.info("Generating new questionaire ID for individual in CE");
+      log.info("Generating new questionaire ID for individual in HH");
     } else {
       throw new IllegalStateException(
           "Invalid combination of caseType, individual and individualCaseId");
