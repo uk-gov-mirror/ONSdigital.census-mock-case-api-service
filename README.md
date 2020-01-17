@@ -37,7 +37,28 @@ When running successfully version information can be obtained from the info endp
 Data examples can be viewed from the examples endpoint
 
 * localhost:8161/cases/examples
+
+## Manual testing
+
+The commands below require the following environmental setup:
+
+    export CC_USERNAME=serco_cks
+    export CC_PASSWORD=temporary
+    export CC_LOCAL=http://localhost:8171
     
+To get a new Questionnaire ID for a case:
+    
+    // Get new CE questionnaire ID for a CE
+    curl -s -H "Content-Type: application/json" "http://localhost:8161/cases/0779ccfb-584c-486f-b36f-667fdf7f8723/qid" | jq
+    // Get new questionnaire ID for individual in a CE
+    curl -s -H "Content-Type: application/json" "http://localhost:8161/cases/0779ccfb-584c-486f-b36f-667fdf7f8723/qid?individual=true" | jq
+
+    // Get new HH questionnaire ID for a HH
+    curl -s -H "Content-Type: application/json" "http://localhost:8161/cases/3305e937-6fb1-4ce1-9d4c-077f147789ac/qid" | jq
+    // Get new questionnaireId for an individual in a HH
+    curl -s -H "Content-Type: application/json" "http://localhost:8161/cases/3305e937-6fb1-4ce1-9d4c-077f147789ac/qid?individual=true&individualCaseId=f91995ac-71d8-42d5-a454-edd02028de73" | jq
+
+
 ## Docker image build
 Is switched off by default for clean deploy. Switch on with;
 
