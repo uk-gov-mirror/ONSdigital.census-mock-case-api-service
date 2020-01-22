@@ -138,7 +138,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     SingleUseQuestionnaireIdDTO newQuestionnaire = new SingleUseQuestionnaireIdDTO();
     newQuestionnaire.setQuestionnaireId(
         String.format("%010d", new Random().nextInt(Integer.MAX_VALUE)));
-    newQuestionnaire.setUac(UUID.randomUUID());
+    newQuestionnaire.setUac("bk5pkrx5hscrclb7");
 
     return ResponseEntity.ok(newQuestionnaire);
   }
