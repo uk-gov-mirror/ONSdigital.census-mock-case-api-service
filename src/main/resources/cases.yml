@@ -38,7 +38,6 @@ casedata:
        "id": "3305e937-6fb1-4ce1-9d4c-077f147789ac",
        "caseType": "HH",
        "region": "E",
-       "state": "ACTIONABLE",
        "collectionExerciseId": "49871667-117d-4a63-9101-f6a0660f73f6",
        "surveyType": "CENSUS"
      },
@@ -80,7 +79,6 @@ casedata:
        "id": "3305e937-6fb1-4ce1-9d4c-077f147789ab",
        "caseType": "HH",
        "region": "E",
-       "state": "ACTIONABLE",
        "collectionExerciseId": "49871667-117d-4a63-9101-f6a0660f73f6",
        "surveyType": "CENSUS"
      },
@@ -109,7 +107,6 @@ casedata:
        "id": "03f58cb5-9af4-4d40-9d60-c124c5bddf09",
        "caseType": "HH",
        "region": "E",
-       "state": "ACTIONABLE",
        "collectionExerciseId": "49871667-117d-4a63-9101-f6a0660f73f6",
        "surveyType": "CCS"
      }
