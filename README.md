@@ -40,12 +40,51 @@ Data examples can be viewed from the examples endpoint
 
 ## Manual testing
 
-The commands below require the following environmental setup:
+### Adding case data
 
-    export CC_USERNAME=serco_cks
-    export CC_PASSWORD=temporary
-    export CC_LOCAL=http://localhost:8171
+To add a new case:
+
+    // Create case data file
+    cat > /tmp/new_case.json << EOF
+    [
+      {
+       "caseRef": "6757766",
+       "arid": "2344266233",
+       "estabArid": "AABBCC",
+       "estabType": "ET",
+       "uprn": "1347459999",
+       "createdDateTime": "2020-01-09T11:52:05.006+01:00",
+       "addressLine1": "Napier House",
+       "addressLine2": "88 Harbour Street",
+       "addressLine3": "Parkhead",
+       "townName": "Glasgow",
+       "postcode": "G1 2AA",
+       "organisationName": "ON",
+       "addressLevel": "E",
+       "abpCode": "AACC",
+       "latitude": "41.40338",
+       "longitude": "2.17403",
+       "oa": "EE22",
+       "lsoa": "x1",
+       "msoa": "x2",
+       "lad": "H1",
+       "caseEvents": [],
+       "id": "0779ccfb-584c-486f-b36f-667fdf7f8723",
+       "caseType": "CE",
+       "region": "E",
+       "state": "ACTIONABLE",
+       "collectionExerciseId": "6334804d-fc8e-4838-b4ee-9a95ea969488",
+       "surveyType": "CCS"
+     }
+     ]
+    EOF
     
+    // Publish the new case(s) to the fake case service
+    curl -s --data @/tmp/new_case.json -H "Content-Type: application/json" http://localhost:8161/cases/data/cases/add
+
+
+### New questionnaire ID
+
 To get a new Questionnaire ID for a case:
     
     // Get new CE questionnaire ID for a CE
