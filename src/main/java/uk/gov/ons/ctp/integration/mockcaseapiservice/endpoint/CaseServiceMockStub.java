@@ -140,7 +140,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
         String.format("%010d", new Random().nextInt(Integer.MAX_VALUE)));
     newQuestionnaire.setUac("bk5pkrx5hscrclb7");
     newQuestionnaire.setFormType("H");
-    newQuestionnaire.setQuestionnaireType("1");  
+    newQuestionnaire.setQuestionnaireType("1");
 
     return ResponseEntity.ok(newQuestionnaire);
   }
