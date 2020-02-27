@@ -40,7 +40,7 @@ casedata:
        "region": "E",
        "collectionExerciseId": "49871667-117d-4a63-9101-f6a0660f73f6",
        "surveyType": "CENSUS",
-	   "handDelivery": false
+       "handDelivery": false
      },
      {
        "caseRef": "124124",
