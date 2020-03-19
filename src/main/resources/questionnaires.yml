@@ -2,14 +2,17 @@ questionnairedata:
   questionnaires: '[
      {
        "questionnaireId": "3305e937-6fb1-4ce1-9d4c-077f147789ab",
-       "active": "true"
+       "active": "true",
+       "formType": "H"
      },
     {
       "questionnaireId": "3305e937-6fb1-4ce1-9d4c-077f147789ac",
-      "active": "true"
+      "active": "true",
+      "formType": "I"
     },
     {
       "questionnaireId": "03f58cb5-9af4-4d40-9d60-c124c5bddf09",
-      "active": "false"
+      "active": "false",
+      "formType": "C"
     }
   ]'
