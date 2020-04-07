@@ -21,6 +21,7 @@ casedata:
        "lsoa": "x1",
        "msoa": "x2",
        "lad": "H1",
+       "secureEstablishment": false,
        "caseEvents": [
         {
           "id": "101",
@@ -48,6 +49,7 @@ casedata:
        "arid": "2344266233",
        "estabArid": "AABBCC",
        "estabType": "ET",
+       "estabUprn": "334111111111",
        "uprn": "1347459999",
        "createdDateTime": "2019-04-15T13:45:26.564+01:00",
        "addressLine1": "Napier House",
@@ -64,6 +66,7 @@ casedata:
        "lsoa": "x1",
        "msoa": "x2",
        "lad": "H1",
+       "secureEstablishment": true,       
        "caseEvents": [
         {
           "id": "201",
@@ -107,6 +110,7 @@ casedata:
        "lsoa": "x1",
        "msoa": "x2",
        "lad": "H1",
+       "secureEstablishment": false,
        "caseEvents": [],
        "id": "03f58cb5-9af4-4d40-9d60-c124c5bddf09",
        "caseType": "HH",
