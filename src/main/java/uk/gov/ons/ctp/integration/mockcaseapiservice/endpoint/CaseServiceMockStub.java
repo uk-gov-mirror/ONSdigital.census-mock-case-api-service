@@ -26,10 +26,10 @@ import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerD
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.QuestionnaireIdDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.SingleUseQuestionnaireIdDTO;
-import uk.gov.ons.ctp.integration.contactcentresvc.representation.CaseQueryRequestDTO;
-import uk.gov.ons.ctp.integration.contactcentresvc.representation.ResponseDTO;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.CasesConfig;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.QuestionnairesConfig;
+import uk.gov.ons.ctp.integration.mockcaseapiservice.model.CaseQueryRequestDTO;
+import uk.gov.ons.ctp.integration.mockcaseapiservice.model.ResponseDTO;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.utility.FailureSimulator;
 
 /** Provides mock endpoints for the case service. */

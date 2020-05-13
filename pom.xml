@@ -150,12 +150,6 @@
         </dependency>
 
         <dependency>
-            <groupId>uk.gov.ons.ctp.integration</groupId>
-            <artifactId>contactcentreserviceapi</artifactId>
-            <version>0.0.78</version>
-        </dependency>
-
-        <dependency>
             <groupId>uk.gov.ons.ctp.integration.common</groupId>
             <artifactId>product-reference</artifactId>
             <version>0.0.21</version>
