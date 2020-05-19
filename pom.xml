@@ -10,7 +10,7 @@
     <parent>
         <groupId>uk.gov.ons.ctp.integration</groupId>
         <artifactId>census-int-common-config</artifactId>
-        <version>0.0.14</version>
+        <version>0.0.15</version>
     </parent>
 
     <name>Census Mock Case API Service</name>
@@ -106,31 +106,16 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-spring-service-connector</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
-            <version>2.1</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>mockwebserver</artifactId>
-            <version>3.14.2</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock-jre8</artifactId>
-            <version>2.23.2</version>
-            <scope>test</scope>
-        </dependency>
-
 
         <!-- SPRING END -->
 
@@ -139,26 +124,26 @@
         <dependency>
             <groupId>uk.gov.ons.ctp.integration.common</groupId>
             <artifactId>framework</artifactId>
-            <version>0.0.52</version>
+            <version>0.0.57</version>
         </dependency>
 
         <dependency>
             <groupId>uk.gov.ons.ctp.integration.common</groupId>
             <artifactId>test-framework</artifactId>
-            <version>0.0.11</version>
+            <version>0.0.14</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>uk.gov.ons.ctp.integration.common</groupId>
             <artifactId>product-reference</artifactId>
-            <version>0.0.21</version>
+            <version>1.0.6</version>
         </dependency>
 
         <dependency>
             <groupId>uk.gov.ons.ctp.integration.common</groupId>
             <artifactId>census-int-case-api-client</artifactId>
-            <version>0.0.12</version>
+            <version>0.0.13</version>
         </dependency>
         <!-- ONS END -->
 
@@ -168,14 +153,6 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock</artifactId>
-            <version>2.19.0</version>
-            <scope>test</scope>
-        </dependency>
-
 
         <dependency>
             <groupId>ma.glasnost.orika</groupId>
@@ -256,13 +233,11 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
         </dependency>
 
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
         </dependency>
 
     </dependencies>
