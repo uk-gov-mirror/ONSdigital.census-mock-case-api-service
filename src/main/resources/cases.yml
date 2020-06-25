@@ -1,7 +1,7 @@
 casedata:
   cases: '[
       {
-       "caseRef": "123123",
+       "caseRef": "123123002",
        "arid": "2344266233",
        "estabArid": "AABBCC",
        "estabType": "ET",
@@ -45,7 +45,7 @@ casedata:
        "handDelivery": false
      },
      {
-       "caseRef": "124124",
+       "caseRef": "124124009",
        "arid": "2344266233",
        "estabArid": "AABBCC",
        "estabType": "ET",
@@ -90,7 +90,7 @@ casedata:
        "handDelivery": false
      },
      {
-       "caseRef": "124124",
+       "caseRef": "124124009",
        "arid": "2344266233",
        "estabArid": "AABBCC",
        "estabType": "ET",
@@ -121,7 +121,7 @@ casedata:
        "handDelivery": false
      },
      {
-       "caseRef": "124124",
+       "caseRef": "124124009",
        "arid": "2344266233",
        "estabArid": "AABBCC",
        "estabType": "ET",
@@ -152,7 +152,7 @@ casedata:
        "handDelivery": false
      },
      {
-       "caseRef": "124124",
+       "caseRef": "124124009",
        "arid": "2344266233",
        "estabArid": "AABBCC",
        "estabType": "ET",
