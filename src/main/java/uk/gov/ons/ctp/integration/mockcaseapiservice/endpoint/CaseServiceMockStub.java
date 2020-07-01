@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import uk.gov.ons.ctp.common.domain.CaseType;
+import uk.gov.ons.ctp.common.domain.FormType;
 import uk.gov.ons.ctp.common.domain.UniquePropertyReferenceNumber;
 import uk.gov.ons.ctp.common.endpoint.CTPEndpoint;
 import uk.gov.ons.ctp.common.error.CTPException;
@@ -136,10 +138,14 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     newQuestionnaire.setQuestionnaireId(
         String.format("%010d", new Random().nextInt(Integer.MAX_VALUE)));
     newQuestionnaire.setUac("bk5pkrx5hscrclb7");
-    newQuestionnaire.setFormType(caseType.contentEquals("CE") ? "CE" : "H");
+    newQuestionnaire.setFormType(formType(caseType).name());
     newQuestionnaire.setQuestionnaireType("1");
 
     return ResponseEntity.ok(newQuestionnaire);
+  }
+
+  private FormType formType(String caseType) {
+    return CaseType.CE.name().equals(caseType) ? FormType.C : FormType.H;
   }
 
   @RequestMapping(value = "/uprn/{uprn}", method = RequestMethod.GET)
