@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import uk.gov.ons.ctp.common.domain.CaseType;
+import uk.gov.ons.ctp.common.domain.FormType;
 import uk.gov.ons.ctp.common.domain.UniquePropertyReferenceNumber;
 import uk.gov.ons.ctp.common.endpoint.CTPEndpoint;
 import uk.gov.ons.ctp.common.error.CTPException;
@@ -65,8 +68,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   @RequestMapping(value = "/{caseId}", method = RequestMethod.GET)
   public ResponseEntity<CaseContainerDTO> findCaseById(
       @PathVariable("caseId") final UUID caseId,
-      @RequestParam(value = "caseEvents", required = false) boolean includeCaseEvents)
-      throws CTPException {
+      @RequestParam(value = "caseEvents", required = false) boolean includeCaseEvents) {
     log.with("case_id", caseId).debug("Entering findCaseById");
 
     FailureSimulator.optionallyTriggerFailure(caseId.toString(), 400, 401, 404, 500);
@@ -81,11 +83,10 @@ public final class CaseServiceMockStub implements CTPEndpoint {
    *
    * @param caseId to find by
    * @return the questionnaire id found
-   * @throws CTPException something went wrong
    */
   @RequestMapping(value = "/ccs/{caseId}/qid", method = RequestMethod.GET)
   public ResponseEntity<QuestionnaireIdDTO> findQuestionnaireIdByCaseId(
-      @PathVariable("caseId") final UUID caseId) throws CTPException {
+      @PathVariable("caseId") final UUID caseId) {
     log.with("case_id", caseId).debug("Entering findQuestionnaireIdByCaseId");
 
     FailureSimulator.optionallyTriggerFailure(caseId.toString(), 400, 401, 404, 500);
@@ -99,14 +100,12 @@ public final class CaseServiceMockStub implements CTPEndpoint {
    *
    * @param caseId to find by
    * @return the new questionnaire id
-   * @throws CTPException something went wrong
    */
   @RequestMapping(value = "/{caseId}/qid", method = RequestMethod.GET)
   public ResponseEntity<SingleUseQuestionnaireIdDTO> newQuestionnaireIdForCase(
       @PathVariable("caseId") final UUID caseId,
       @RequestParam(required = false) final boolean individual,
-      @RequestParam(required = false) final UUID individualCaseId)
-      throws CTPException {
+      @RequestParam(required = false) final UUID individualCaseId) {
     log.with("case_id", caseId)
         .with("individual", individual)
         .with("individualCaseId", individualCaseId)
@@ -139,15 +138,19 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     newQuestionnaire.setQuestionnaireId(
         String.format("%010d", new Random().nextInt(Integer.MAX_VALUE)));
     newQuestionnaire.setUac("bk5pkrx5hscrclb7");
-    newQuestionnaire.setFormType(caseType.contentEquals("CE") ? "CE" : "H");
+    newQuestionnaire.setFormType(formType(caseType).name());
     newQuestionnaire.setQuestionnaireType("1");
 
     return ResponseEntity.ok(newQuestionnaire);
   }
 
+  private FormType formType(String caseType) {
+    return CaseType.CE.name().equals(caseType) ? FormType.C : FormType.H;
+  }
+
   @RequestMapping(value = "/uprn/{uprn}", method = RequestMethod.GET)
   public ResponseEntity<List<CaseContainerDTO>> findCaseByUPRN(
-      @PathVariable(value = "uprn") final UniquePropertyReferenceNumber uprn) throws CTPException {
+      @PathVariable(value = "uprn") final UniquePropertyReferenceNumber uprn) {
     log.with("uprn", uprn).debug("Entering findCaseByUPRN");
 
     FailureSimulator.optionallyTriggerFailure(Long.toString(uprn.getValue()), 400, 401, 404, 500);
@@ -158,8 +161,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
 
   @RequestMapping(value = "/ref/{ref}", method = RequestMethod.GET)
   public ResponseEntity<CaseContainerDTO> findCaseByCaseReference(
-      @PathVariable(value = "ref") final long ref, @Valid CaseQueryRequestDTO requestParamsDTO)
-      throws CTPException {
+      @PathVariable(value = "ref") final long ref, @Valid CaseQueryRequestDTO requestParamsDTO) {
     log.with("ref", ref)
         .with("caseEvents", requestParamsDTO.getCaseEvents())
         .info("Entering GET getCaseByCaseReference");
@@ -173,9 +175,9 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     return ResponseEntity.ok(caseDetails);
   }
 
-  private void nullTestThrowsException(Object response) throws CTPException {
+  private void nullTestThrowsException(Object response) {
     if (response == null) {
-      throw new CTPException(CTPException.Fault.RESOURCE_NOT_FOUND);
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
   }
 
