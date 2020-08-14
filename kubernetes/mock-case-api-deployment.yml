@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mockcaseapi
@@ -6,6 +6,9 @@ metadata:
     app: mockcaseapi
 spec:
   replicas: [REPLICAS]
+  selector:
+    matchLabels:
+      app: mockcaseapi
   strategy:
     rollingUpdate:
       maxSurge: 1
