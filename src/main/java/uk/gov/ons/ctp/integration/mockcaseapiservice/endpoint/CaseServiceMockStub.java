@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import javax.validation.Valid;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +35,15 @@ import uk.gov.ons.ctp.integration.mockcaseapiservice.QuestionnairesConfig;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.model.CaseQueryRequestDTO;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.model.ResponseDTO;
 import uk.gov.ons.ctp.integration.mockcaseapiservice.utility.FailureSimulator;
+import uk.gov.ons.ctp.integration.mockcaseapiservice.validation.RequestValidator;
 
 /** Provides mock endpoints for the case service. */
 @RestController
 @RequestMapping(value = "/cases", produces = "application/json")
 public final class CaseServiceMockStub implements CTPEndpoint {
   private static final Logger log = LoggerFactory.getLogger(CaseServiceMockStub.class);
+
+  private static final int UAC_LENGTH = 16;
 
   @Autowired private CasesConfig casesConfig; // can allow field injection here in a mock service.
   @Autowired private QuestionnairesConfig questionnairesConfig;
@@ -120,25 +124,13 @@ public final class CaseServiceMockStub implements CTPEndpoint {
       throw new IllegalStateException("Can't supply individualCaseId if not for an individual");
     }
 
-    String caseType = caseDetails.getCaseType();
-    if (caseType.equals("CE") && individual == false) {
-      log.info("Generating new questionnaire ID for CE");
-    } else if (caseType.equals("CE") && individual == true && individualCaseId == null) {
-      log.info("Generating new questionnaire ID for individual in CE");
-    } else if (caseType.equals("HH") && individual == false) {
-      log.info("Generating new questionnaire ID for HH");
-    } else if (caseType.equals("HH") && individual == true && individualCaseId != null) {
-      log.info("Generating new questionaire ID for individual in HH");
-    } else {
-      throw new IllegalStateException(
-          "Invalid combination of caseType, individual and individualCaseId");
-    }
+    RequestValidator.validateGetNewQidByCaseIdRequest(caseDetails, individual, individualCaseId);
 
     SingleUseQuestionnaireIdDTO newQuestionnaire = new SingleUseQuestionnaireIdDTO();
     newQuestionnaire.setQuestionnaireId(
         String.format("%010d", new Random().nextInt(Integer.MAX_VALUE)));
-    newQuestionnaire.setUac("bk5pkrx5hscrclb7");
-    newQuestionnaire.setFormType(formType(caseType).name());
+    newQuestionnaire.setUac(RandomStringUtils.randomAlphanumeric(UAC_LENGTH));
+    newQuestionnaire.setFormType(formType(caseDetails.getCaseType()).name());
     newQuestionnaire.setQuestionnaireType("1");
 
     return ResponseEntity.ok(newQuestionnaire);
