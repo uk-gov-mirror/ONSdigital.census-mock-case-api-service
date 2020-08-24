@@ -8,13 +8,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.validator.routines.checkdigit.LuhnCheckDigit;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import uk.gov.ons.ctp.common.error.CTPException;
-import uk.gov.ons.ctp.common.error.CTPException.Fault;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 
@@ -23,8 +21,6 @@ import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 @PropertySource(factory = YamlPropertySourceFactory.class, value = "classpath:cases.yml")
 @ConfigurationProperties("casedata")
 public class CasesConfig {
-
-  private LuhnCheckDigit luhnChecker = new LuhnCheckDigit();
 
   private String cases;
   private final Map<String, CaseContainerDTO> caseUUIDMap =
@@ -50,7 +46,7 @@ public class CasesConfig {
     final ObjectMapper objectMapper = new ObjectMapper();
     final List<CaseContainerDTO> caseList =
         objectMapper.readValue(cases, new TypeReference<List<CaseContainerDTO>>() {});
-    addData(caseList);
+    addOrReplaceData(caseList);
   }
 
   public CaseContainerDTO getCaseByUUID(final String key) {
@@ -69,25 +65,13 @@ public class CasesConfig {
     return eventMap.getOrDefault(key, new ArrayList<>());
   }
 
-  private void validateCase(CaseContainerDTO caseDetails) throws CTPException {
-    if (caseUUIDMap.containsKey(caseDetails.getId().toString())) {
-      throw new CTPException(
-          CTPException.Fault.BAD_REQUEST,
-          "Duplicate case UUID: " + caseDetails.getId().toString() + " unable to update maps");
-    }
-    if (!luhnChecker.isValid(caseDetails.getCaseRef())) {
-      throw new CTPException(Fault.BAD_REQUEST, "Invalid Case Reference");
-    }
-  }
-
   /**
-   * add data in the case maps from a list of Cases
+   * add or replace data in the case maps from a list of Cases
    *
    * @param caseList - list of cases
    */
-  public void addData(final List<CaseContainerDTO> caseList) throws CTPException {
+  public void addOrReplaceData(final List<CaseContainerDTO> caseList) throws CTPException {
     for (CaseContainerDTO caseDetails : caseList) {
-      validateCase(caseDetails);
       updateMaps(caseDetails);
     }
   }

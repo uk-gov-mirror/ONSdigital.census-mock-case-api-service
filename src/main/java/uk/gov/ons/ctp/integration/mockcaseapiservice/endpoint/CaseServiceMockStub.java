@@ -193,7 +193,7 @@ public final class CaseServiceMockStub implements CTPEndpoint {
       throws CTPException {
 
     log.with("requestBody", requestBody).info("Entering POST addCData");
-    casesConfig.addData(requestBody);
+    casesConfig.addOrReplaceData(requestBody);
 
     return ResponseEntity.ok(createResponseDTO("MockCaseAddService"));
   }
