@@ -182,17 +182,18 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   }
 
   /**
-   * Post a list of Cases in order to add to the case maps driving the responses here.
+   * Post a list of Cases in order to add cases to, or replace cases in, the case maps driving the
+   * responses here.
    *
    * @param requestBody - a list of cases
    * @return - response confirming post.
    */
-  @RequestMapping(value = "/data/cases/add", method = RequestMethod.POST)
+  @RequestMapping(value = "/data/cases/save", method = RequestMethod.POST)
   @ResponseStatus(value = HttpStatus.OK)
-  public ResponseEntity<ResponseDTO> addCaseData(@RequestBody List<CaseContainerDTO> requestBody)
-      throws CTPException {
+  public ResponseEntity<ResponseDTO> addOrReplaceCaseData(
+      @RequestBody List<CaseContainerDTO> requestBody) throws CTPException {
 
-    log.with("requestBody", requestBody).info("Entering POST addCData");
+    log.with("requestBody", requestBody).info("Entering POST addOrReplaceCaseData");
     casesConfig.addOrReplaceData(requestBody);
 
     return ResponseEntity.ok(createResponseDTO("MockCaseAddService"));
