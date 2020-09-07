@@ -121,12 +121,14 @@ public class CasesConfig {
         caseUprnMap.put(caseDetails.getUprn(), new ArrayList<>());
       } 
 
-      List<CaseContainerDTO> casesForUprn = caseUprnMap.get(caseDetails.getUprn());
-      for (CaseContainerDTO caze:casesForUprn) {
-        if (caze.getId().equals(caseDetails.getId())) {
-          casesForUprn.remove(caze);
+      List<CaseContainerDTO> oldCasesForUprn = caseUprnMap.get(caseDetails.getUprn());
+      List<CaseContainerDTO> newCasesForUprn = caseUprnMap.get(caseDetails.getUprn());
+      for (CaseContainerDTO caze:oldCasesForUprn) {
+        if (!caze.getId().equals(caseDetails.getId())) {
+          newCasesForUprn.add(caze);
         }
       }
+      caseUprnMap.put(caseDetails.getUprn(), newCasesForUprn);
       caseUprnMap.get(caseDetails.getUprn()).add(caseDetails);
     }
     synchronized (eventMap) {
