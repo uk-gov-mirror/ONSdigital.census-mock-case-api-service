@@ -119,6 +119,13 @@ public class CasesConfig {
     synchronized (caseUprnMap) {
       if (!caseUprnMap.containsKey(caseDetails.getUprn())) {
         caseUprnMap.put(caseDetails.getUprn(), new ArrayList<>());
+      } 
+
+      List<CaseContainerDTO> casesForUprn = caseUprnMap.get(caseDetails.getUprn());
+      for (CaseContainerDTO caze:casesForUprn) {
+        if (caze.getId().equals(caseDetails.getId())) {
+          casesForUprn.remove(caze);
+        }
       }
       caseUprnMap.get(caseDetails.getUprn()).add(caseDetails);
     }
