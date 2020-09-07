@@ -1,7 +1,5 @@
 package uk.gov.ons.ctp.integration.mockcaseapiservice;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import uk.gov.ons.ctp.common.error.CTPException;
 import uk.gov.ons.ctp.common.error.CTPException.Fault;
 import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.CaseContainerDTO;
@@ -122,7 +122,7 @@ public class CasesConfig {
       } 
 
       List<CaseContainerDTO> oldCasesForUprn = caseUprnMap.get(caseDetails.getUprn());
-      List<CaseContainerDTO> newCasesForUprn = caseUprnMap.get(caseDetails.getUprn());
+      List<CaseContainerDTO> newCasesForUprn = new ArrayList<>();
       for (CaseContainerDTO caze:oldCasesForUprn) {
         if (!caze.getId().equals(caseDetails.getId())) {
           newCasesForUprn.add(caze);
