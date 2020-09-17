@@ -25,7 +25,6 @@ import uk.gov.ons.ctp.integration.caseapiclient.caseservice.model.EventDTO;
 public class CasesConfig {
 
   private LuhnCheckDigit luhnChecker = new LuhnCheckDigit();
-
   private String cases;
   private final Map<String, CaseContainerDTO> caseUUIDMap =
       Collections.synchronizedMap(new HashMap<>());
@@ -50,7 +49,7 @@ public class CasesConfig {
     final ObjectMapper objectMapper = new ObjectMapper();
     final List<CaseContainerDTO> caseList =
         objectMapper.readValue(cases, new TypeReference<List<CaseContainerDTO>>() {});
-    addData(caseList);
+    addOrReplaceData(caseList);
   }
 
   public CaseContainerDTO getCaseByUUID(final String key) {
@@ -69,25 +68,16 @@ public class CasesConfig {
     return eventMap.getOrDefault(key, new ArrayList<>());
   }
 
-  private void validateCase(CaseContainerDTO caseDetails) throws CTPException {
-    if (caseUUIDMap.containsKey(caseDetails.getId().toString())) {
-      throw new CTPException(
-          CTPException.Fault.BAD_REQUEST,
-          "Duplicate case UUID: " + caseDetails.getId().toString() + " unable to update maps");
-    }
-    if (!luhnChecker.isValid(caseDetails.getCaseRef())) {
-      throw new CTPException(Fault.BAD_REQUEST, "Invalid Case Reference");
-    }
-  }
-
   /**
-   * add data in the case maps from a list of Cases
+   * add or replace data in the case maps from a list of Cases
    *
    * @param caseList - list of cases
    */
-  public void addData(final List<CaseContainerDTO> caseList) throws CTPException {
+  public void addOrReplaceData(final List<CaseContainerDTO> caseList) throws CTPException {
     for (CaseContainerDTO caseDetails : caseList) {
-      validateCase(caseDetails);
+      if (!luhnChecker.isValid(caseDetails.getCaseRef())) {
+        throw new CTPException(Fault.BAD_REQUEST, "Invalid Case Reference");
+      }
       updateMaps(caseDetails);
     }
   }
@@ -130,6 +120,15 @@ public class CasesConfig {
       if (!caseUprnMap.containsKey(caseDetails.getUprn())) {
         caseUprnMap.put(caseDetails.getUprn(), new ArrayList<>());
       }
+
+      List<CaseContainerDTO> oldCasesForUprn = caseUprnMap.get(caseDetails.getUprn());
+      List<CaseContainerDTO> newCasesForUprn = new ArrayList<>();
+      for (CaseContainerDTO caze : oldCasesForUprn) {
+        if (!caze.getId().equals(caseDetails.getId())) {
+          newCasesForUprn.add(caze);
+        }
+      }
+      caseUprnMap.put(caseDetails.getUprn(), newCasesForUprn);
       caseUprnMap.get(caseDetails.getUprn()).add(caseDetails);
     }
     synchronized (eventMap) {
