@@ -13,6 +13,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,6 +81,16 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     nullTestThrowsException(caseDetails);
     caseDetails.setCaseEvents(getCaseEvents(caseDetails.getId().toString(), includeCaseEvents));
     return ResponseEntity.ok(caseDetails);
+  }
+
+  @GetMapping(value = "/ccs/postcode/{postcode}")
+  public List<CaseContainerDTO> findCCSCasesByPostcode(
+      @PathVariable("postcode") String postcode,
+      @RequestParam(value = "caseEvents", required = false, defaultValue = "false")
+          boolean caseEvents) {
+    log.with("postcode", postcode).debug("Entering findCCSCasesByPostcode");
+    List<CaseContainerDTO> ccsCases = casesConfig.getCCSCasesByPostcode(postcode);
+    return ccsCases;
   }
 
   /**

@@ -33,6 +33,8 @@ public class CasesConfig {
   private final Map<String, List<CaseContainerDTO>> caseUprnMap =
       Collections.synchronizedMap(new HashMap<>());
   private final Map<String, List<EventDTO>> eventMap = Collections.synchronizedMap(new HashMap<>());
+  private final Map<String, List<CaseContainerDTO>> casePostcodeMap =
+      Collections.synchronizedMap(new HashMap<>());
 
   public String getCases() {
     return cases;
@@ -68,6 +70,10 @@ public class CasesConfig {
     return eventMap.getOrDefault(key, new ArrayList<>());
   }
 
+  public List<CaseContainerDTO> getCCSCasesByPostcode(final String key) {
+    return casePostcodeMap.getOrDefault(key, null);
+  }
+
   /**
    * add or replace data in the case maps from a list of Cases
    *
@@ -101,6 +107,15 @@ public class CasesConfig {
       caseRefMap.clear();
       setCases(cases);
     }
+  }
+
+  /**
+   * Reset the CCS data maps back to the original JSON
+   *
+   * @throws IOException - thrown
+   */
+  public void resetCCSData() throws IOException, CTPException {
+    casePostcodeMap.clear();
   }
 
   /**
