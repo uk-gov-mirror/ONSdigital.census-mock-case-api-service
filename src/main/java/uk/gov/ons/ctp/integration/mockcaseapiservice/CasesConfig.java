@@ -123,7 +123,7 @@ public class CasesConfig {
   /**
    * Update map from a ccs case
    *
-   * @param ccsCaseDetails - a case
+   * @param ccsCaseDetails - a ccs case
    */
   private void updateCcsMap(final CaseContainerDTO ccsCaseDetails) {
     String postcodeToUpdate = ccsCaseDetails.getPostcode();
