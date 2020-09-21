@@ -83,13 +83,20 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     return ResponseEntity.ok(caseDetails);
   }
 
+  /**
+   * the GET endpoint to find a CCS Case by Postcode
+   *
+   * @param postcode
+   * @param caseEvents
+   * @return the List of ccs cases found
+   */
   @GetMapping(value = "/ccs/postcode/{postcode}")
   public List<CaseContainerDTO> findCCSCasesByPostcode(
       @PathVariable("postcode") String postcode,
       @RequestParam(value = "caseEvents", required = false, defaultValue = "false")
           boolean caseEvents) {
     log.with("postcode", postcode).debug("Entering findCCSCasesByPostcode");
-    List<CaseContainerDTO> ccsCases = casesConfig.getCCSCasesByPostcode(postcode);
+    List<CaseContainerDTO> ccsCases = casesConfig.getCcsCasesByPostcode(postcode);
     return ccsCases;
   }
 
@@ -207,7 +214,25 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     log.with("requestBody", requestBody).info("Entering POST addOrReplaceCaseData");
     casesConfig.addOrReplaceData(requestBody);
 
-    return ResponseEntity.ok(createResponseDTO("MockCaseAddService"));
+    return ResponseEntity.ok(createResponseDTO("MockCaseSaveService"));
+  }
+
+  /**
+   * Post a list of CCS Cases in order to add cases to, or replace cases in, the case maps driving
+   * the responses here.
+   *
+   * @param requestBody - a list of ccs cases
+   * @return - response confirming post.
+   */
+  @RequestMapping(value = "/data/ccs/cases/save", method = RequestMethod.POST)
+  @ResponseStatus(value = HttpStatus.OK)
+  public ResponseEntity<ResponseDTO> addOrReplaceCcsCaseData(
+      @RequestBody List<CaseContainerDTO> requestBody) throws CTPException {
+
+    log.with("requestBody", requestBody).info("Entering POST addOrReplaceCcsCaseData");
+    casesConfig.addOrReplaceCcsData(requestBody);
+
+    return ResponseEntity.ok(createResponseDTO("MockCcsCaseSaveService"));
   }
 
   /**
