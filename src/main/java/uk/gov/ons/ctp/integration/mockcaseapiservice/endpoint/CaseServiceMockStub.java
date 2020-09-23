@@ -92,7 +92,9 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   @GetMapping(value = "/ccs/postcode/{postcode}")
   public List<CaseContainerDTO> findCcsCasesByPostcode(@PathVariable("postcode") String postcode) {
     log.with("postcode", postcode).debug("Entering findCcsCasesByPostcode");
+    FailureSimulator.optionallyTriggerFailure(postcode, 400, 401, 404, 500);
     List<CaseContainerDTO> ccsCases = casesConfig.getCcsCasesByPostcode(postcode);
+    nullTestThrowsException(ccsCases);
     return ccsCases;
   }
 
