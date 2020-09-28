@@ -93,7 +93,7 @@ public class CasesConfig {
    *
    * @param ccsCaseList - list of ccs cases
    */
-  public void addOrReplaceCcsData(final List<CaseContainerDTO> ccsCaseList) throws CTPException {
+  public void addOrReplaceCcsData(final List<CaseContainerDTO> ccsCaseList) {
     for (CaseContainerDTO ccsCaseDetails : ccsCaseList) {
       updateCcsMap(ccsCaseDetails);
     }
