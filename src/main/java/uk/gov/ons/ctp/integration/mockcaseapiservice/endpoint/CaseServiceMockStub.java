@@ -13,6 +13,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,6 +81,21 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     nullTestThrowsException(caseDetails);
     caseDetails.setCaseEvents(getCaseEvents(caseDetails.getId().toString(), includeCaseEvents));
     return ResponseEntity.ok(caseDetails);
+  }
+
+  /**
+   * the GET endpoint to find a CCS Case by Postcode
+   *
+   * @param postcode
+   * @return the List of ccs cases found
+   */
+  @GetMapping(value = "/ccs/postcode/{postcode}")
+  public List<CaseContainerDTO> findCcsCasesByPostcode(@PathVariable("postcode") String postcode) {
+    log.with("postcode", postcode).debug("Entering findCcsCasesByPostcode");
+    FailureSimulator.optionallyTriggerFailure(postcode, 400, 401, 404, 500);
+    List<CaseContainerDTO> ccsCases = casesConfig.getCcsCasesByPostcode(postcode);
+    nullTestThrowsException(ccsCases);
+    return ccsCases;
   }
 
   /**
@@ -196,7 +212,25 @@ public final class CaseServiceMockStub implements CTPEndpoint {
     log.with("requestBody", requestBody).info("Entering POST addOrReplaceCaseData");
     casesConfig.addOrReplaceData(requestBody);
 
-    return ResponseEntity.ok(createResponseDTO("MockCaseAddService"));
+    return ResponseEntity.ok(createResponseDTO("MockCaseSaveService"));
+  }
+
+  /**
+   * Post a list of CCS Cases in order to add cases to, or replace cases in, the case maps driving
+   * the responses here.
+   *
+   * @param requestBody - a list of ccs cases
+   * @return - response confirming post.
+   */
+  @RequestMapping(value = "/data/ccs/cases/save", method = RequestMethod.POST)
+  @ResponseStatus(value = HttpStatus.OK)
+  public ResponseEntity<ResponseDTO> addOrReplaceCcsCaseData(
+      @RequestBody List<CaseContainerDTO> requestBody) throws CTPException {
+
+    log.with("requestBody", requestBody).info("Entering POST addOrReplaceCcsCaseData");
+    casesConfig.addOrReplaceCcsData(requestBody);
+
+    return ResponseEntity.ok(createResponseDTO("MockCcsCaseSaveService"));
   }
 
   /**

@@ -33,6 +33,8 @@ public class CasesConfig {
   private final Map<String, List<CaseContainerDTO>> caseUprnMap =
       Collections.synchronizedMap(new HashMap<>());
   private final Map<String, List<EventDTO>> eventMap = Collections.synchronizedMap(new HashMap<>());
+  private final Map<String, List<CaseContainerDTO>> ccsCasePostcodeMap =
+      Collections.synchronizedMap(new HashMap<>());
 
   public String getCases() {
     return cases;
@@ -68,6 +70,10 @@ public class CasesConfig {
     return eventMap.getOrDefault(key, new ArrayList<>());
   }
 
+  public List<CaseContainerDTO> getCcsCasesByPostcode(final String key) {
+    return ccsCasePostcodeMap.getOrDefault(key, null);
+  }
+
   /**
    * add or replace data in the case maps from a list of Cases
    *
@@ -79,6 +85,17 @@ public class CasesConfig {
         throw new CTPException(Fault.BAD_REQUEST, "Invalid Case Reference");
       }
       updateMaps(caseDetails);
+    }
+  }
+
+  /**
+   * add or replace CCS data in the ccs case maps from a list of Cases
+   *
+   * @param ccsCaseList - list of ccs cases
+   */
+  public void addOrReplaceCcsData(final List<CaseContainerDTO> ccsCaseList) {
+    for (CaseContainerDTO ccsCaseDetails : ccsCaseList) {
+      updateCcsMap(ccsCaseDetails);
     }
   }
 
@@ -101,6 +118,29 @@ public class CasesConfig {
       caseRefMap.clear();
       setCases(cases);
     }
+  }
+
+  /**
+   * Update map from a ccs case
+   *
+   * @param ccsCaseDetails - a ccs case
+   */
+  private void updateCcsMap(final CaseContainerDTO ccsCaseDetails) {
+    String postcodeToUpdate = ccsCaseDetails.getPostcode();
+
+    if (!ccsCasePostcodeMap.containsKey(postcodeToUpdate)) {
+      ccsCasePostcodeMap.put(postcodeToUpdate, new ArrayList<>());
+    }
+
+    List<CaseContainerDTO> oldCcsCasesForPostcode = ccsCasePostcodeMap.get(postcodeToUpdate);
+    List<CaseContainerDTO> newCcsCasesForPostcode = new ArrayList<>();
+    for (CaseContainerDTO caze : oldCcsCasesForPostcode) {
+      if (!caze.getId().equals(ccsCaseDetails.getId())) {
+        newCcsCasesForPostcode.add(caze);
+      }
+    }
+    ccsCasePostcodeMap.put(postcodeToUpdate, newCcsCasesForPostcode);
+    ccsCasePostcodeMap.get(postcodeToUpdate).add(ccsCaseDetails);
   }
 
   /**
