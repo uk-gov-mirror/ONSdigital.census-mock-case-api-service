@@ -148,7 +148,7 @@ casedata:
        "addressType": "HH",
        "region": "N",
        "collectionExerciseId": "49871667-117d-4a63-9101-f6a0660f73f6",
-       "surveyType": "CCS",
+       "surveyType": "CENSUS",
        "handDelivery": false
      },
      {
