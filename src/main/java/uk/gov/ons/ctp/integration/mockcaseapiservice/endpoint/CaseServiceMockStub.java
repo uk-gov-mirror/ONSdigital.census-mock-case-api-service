@@ -1,5 +1,7 @@
 package uk.gov.ons.ctp.integration.mockcaseapiservice.endpoint;
 
+import com.godaddy.logging.Logger;
+import com.godaddy.logging.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import com.godaddy.logging.Logger;
-import com.godaddy.logging.LoggerFactory;
 import uk.gov.ons.ctp.common.domain.CaseType;
 import uk.gov.ons.ctp.common.domain.FormType;
 import uk.gov.ons.ctp.common.domain.UniquePropertyReferenceNumber;
@@ -46,12 +46,11 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   private static final Logger log = LoggerFactory.getLogger(CaseServiceMockStub.class);
 
   private static final int UAC_LENGTH = 16;
-  
+
   private static volatile long FIND_CASE_BY_UPRN_SLEEP_TIME = 10;
 
   private static AtomicInteger concurrentCounterFindCaseByUPRN = new AtomicInteger(0);
-  
-  
+
   @Autowired private CasesConfig casesConfig; // can allow field injection here in a mock service.
   @Autowired private QuestionnairesConfig questionnairesConfig;
 
@@ -165,19 +164,19 @@ public final class CaseServiceMockStub implements CTPEndpoint {
   @RequestMapping(value = "/uprn/{uprn}", method = RequestMethod.GET)
   public ResponseEntity<List<CaseContainerDTO>> findCaseByUPRN(
       @PathVariable(value = "uprn") final UniquePropertyReferenceNumber uprn) {
-    int numConcurrent = concurrentCounterFindCaseByUPRN.incrementAndGet(); 
+    int numConcurrent = concurrentCounterFindCaseByUPRN.incrementAndGet();
     log.with("uprn", uprn).debug("Entering findCaseByUPRN: ConcurrentCount: " + numConcurrent);
-    
+
     try {
       Thread.sleep(FIND_CASE_BY_UPRN_SLEEP_TIME);
     } catch (InterruptedException e) {
       log.error(e, "Sleep interrupted");
     }
-    
+
     FailureSimulator.optionallyTriggerFailure(Long.toString(uprn.getValue()), 400, 401, 404, 500);
     List<CaseContainerDTO> cases = casesConfig.getCaseByUprn(Long.toString(uprn.getValue()));
     nullTestThrowsException(cases);
-    
+
     numConcurrent = concurrentCounterFindCaseByUPRN.decrementAndGet();
     log.debug("Concurrent count on exit: " + numConcurrent);
 
