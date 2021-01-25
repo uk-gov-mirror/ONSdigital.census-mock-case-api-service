@@ -37,6 +37,10 @@ management:
 
 server:
   port: 8161
+  undertow:
+    threads:
+      worker: 50
+      io: 50
 
 spring:
   mvc:
