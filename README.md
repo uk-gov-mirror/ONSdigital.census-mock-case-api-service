@@ -1,7 +1,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3ba6416fd11d41fdaf281e7dab6042dc)](https://www.codacy.com/app/philwhiles/census-mock-case-api-service?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ONSdigital/census-mock-case-api-service&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.com/ONSdigital/census-mock-case-api-service.svg?branch=master)](https://travis-ci.com/ONSdigital/census-mock-case-api-service)
 [![codecov](https://codecov.io/gh/ONSdigital/census-mock-case-api-service/branch/master/graph/badge.svg)](https://codecov.io/gh/ONSdigital/census-mock-case-api-service)
-
+ 
 
 # Census Mock Case API Service
 This repository is a test service and can be run instead of the case api service to test other services. It returns cases and questionnaires that are stored as JSON in 2 yml files 
