@@ -56,7 +56,8 @@ spec:
             -Dspring.profiles.active=[ENV]
             -Dlogging.level.uk.gov.ons.ctp=DEBUG
             -Dlogging.level.org.springframework=WARN
-            -Dendpoints.autoconfig.enabled=false-Dendpoints.beans.enabled=false
+            -Dendpoints.autoconfig.enabled=false
+            -Dendpoints.beans.enabled=false
             -Dendpoints.configprops.enabled=false
             -Dendpoints.dump.enabled=false
             -Dendpoints.env.enabled=false
